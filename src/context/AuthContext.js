@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loadingAuth, setLoadingAuth] = useState(true);
 
+    // Load user from backend if token exists
     const loadUser = async () => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -29,9 +30,16 @@ export const AuthProvider = ({ children }) => {
         loadUser();
     }, []);
 
+    // Login user: store token & set user state
     const login = (token, userData) => {
         localStorage.setItem("token", token);
         setUser(userData);
+    };
+
+    // Logout user: remove token & reset user state
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
     };
 
     return (
