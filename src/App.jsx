@@ -1,17 +1,22 @@
-import React, { useContext } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ExerciseDetail from "./pages/Dashboard";
+import ExerciseDetail from "./pages/ExerciseDetail";
 import Dashboard from "./pages/Dashboard";
-import { AuthContext } from './context/AuthContext';
-import './App.css';
+import ExerciseList from "./components/ExerciseList";
+import WorkoutList from "./components/WorkoutList";
+import workoutForm from "./components/WorkoutForm";
+import { AuthContext } from "./context/AuthContext";
+import "./App.css";
+import { defaultClientConditions } from "vite";
 
+// Wrapper for protecting private routes
 const PrivateRoute = ({ children }) => {
   const { user, loadingAuth } = useContext(AuthContext);
-  if (loadingAuth) return <div>Loading...</div>;
+  if (!loadingAuth) return <div>Loading...</div>
   return user ? children : <Navigate to="/login" />;
 };
 
@@ -20,11 +25,40 @@ function App() {
     <>
       <Navbar />
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/exercise/:id" element={<ExerciseDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+
+        {/* Exercises */}
+        <Route path="/exercises" element={<ExerciseList />} />
+        <Route path="exercises/:id" element={<ExerciseDetail />} />
+
+        {/* Private routes */}
+        <Route 
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route 
+          path="/workouts"
+          element={
+            <PrivateRoute>
+              <WorkoutList />
+            </PrivateRoute>
+          }
+        />
+        <Route 
+          path="/workouts/new"
+          element={
+            <PrivateRoute>
+              <workoutForm />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
