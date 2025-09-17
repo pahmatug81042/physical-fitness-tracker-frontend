@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchExerciseById } from "../services/exerciseService";
-import { fetchVideosForExercise } from "../services/videoService";
-import { getWorkouts, addExerciseToWorkout } from "../services/workoutService";
+import { fetchVideosForExercise } from "../services/exerciseService";
 import ExerciseVideos from "../components/ExerciseVideos";
+import AddToWorkoutModal from "../components/AddToWorkoutModal";
 
 export default function ExerciseDetail() {
     const { id } = useParams();
     const [exercise, setExercise] = useState(null);
     const [videos, setVideos] = useState([]);
-    const [workouts, setWorkouts] = useState([]);
-    const [form, setForm] = useState(
-        {
-            workoutId: "",
-            sets: "",
-            reps: "",
-            duration: "",
-        }
-    );
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -26,8 +18,6 @@ export default function ExerciseDetail() {
                 setExercise(ex);
                 const vids = await fetchVideosForExercise(ex.name);
                 setVideos(vids);
-                const ws = await getWorkouts();
-                setWorkouts(ws);
             } catch (error) {
                 console.error(error);
             }
@@ -36,35 +26,6 @@ export default function ExerciseDetail() {
     }, [id]);
 
     if (!exercise) return <div>Loading...</div>;
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.name });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!form.workoutId) return alert("Please select a workout");
-        try {
-            await addExerciseToWorkout(form.workoutId, {
-                exerciseId: exercise.id || exercise._id,
-                sets: form.sets,
-                reps: form.reps,
-                duration: form.duration,
-            });
-            alert("Exercise added successfully!");
-            setForm(
-                {
-                    workoutId: "",
-                    sets: "",
-                    reps: "",
-                    duration: "",
-                }
-            );
-        } catch (error) {
-            console.error(error);
-            alert("Failed to add exercise.");
-        }
-    };
 
     const mainImg = 
         videos?.[0]?.videos?.thumbnails?.[0]?.url || 
@@ -77,72 +38,33 @@ export default function ExerciseDetail() {
             <img 
                 src={mainImg}
                 alt={exercise.name}
-                style={
-                    {
-                        width: "100%",
-                        maxWidth: 760,
-                        borderRadius: 8,
-                    }
-                }
+                style={{ width: "100%", maxWidth: 760, borderRadius: 8 }}
             />
             <p>{exercise.description}</p>
-
+            <button
+                onClick={() => setModalOpen(true)}
+                style={
+                    {
+                        margin: "12px 0",
+                        padding: "6px 12px",
+                        borderRadius: 4,
+                        border: "none",
+                        backgroundColor: "007bff",
+                        color: "white",
+                        cursor: "pointer",
+                    }
+                }
+            >
+                Add to Workout
+            </button>
+            {modalOpen && (
+                <AddToWorkoutModal 
+                    exerciseId={exercise._id || exercise.id}
+                    onClose={() => setModalOpen(false)}
+                />
+            )}
             <h3>Tutorial Videos</h3>
             <ExerciseVideos exerciseVideos={videos} name={exercise.name} />
-
-            <h3 style={{ marginTop: 20 }}>
-                Add to Workout
-            </h3>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Select Workout:
-                    <select
-                        name="workoutId"
-                        value={form.workoutId}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">-- Choose --</option>
-                        {workouts.map((w) => (
-                            <option key={w._id} value={w._id}>
-                                {w.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                    Sets:
-                    <input 
-                        type="number"
-                        name="sets"
-                        value={form.sets}
-                        onChange={handleChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Reps:
-                    <input 
-                        type="number"
-                        name="reps"
-                        value={form.reps}
-                        onChange={handleChange}
-                    />
-                </label>
-                <br />
-                <label>
-                    Duration (min):
-                    <input 
-                        type="number"
-                        name="duration"
-                        value={form.duration}
-                        onChange={handleChange}
-                    />
-                </label>
-                <br />
-                <button type="submit">Add</button>
-            </form>
         </div>
     );
 };
