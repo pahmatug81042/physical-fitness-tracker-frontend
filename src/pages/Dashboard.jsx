@@ -1,27 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { getWorkouts } from "../services/workoutService";
+import React, { useState } from "react";
+import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
-import WorkoutForm from "../components/WorkoutForm";
+import AddToWorkoutModal from "../components/AddToWorkoutModal";
 
 export default function Dashboard() {
-    const [workouts, setWorkouts] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedExercise, setSelectedExercise] = useState(null);
 
-    const load = async () => {
-        try {
-            const data = await getWorkouts();
-            setWorkouts(data);
-        } catch (error) {
-            console.error(error);
-        }
+    const handleAddClick = (exercise) => {
+        setSelectedExercise(exercise);
+        setShowModal(true);
     };
 
-    useEffect(() => { load(); }, []);
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedExercise(null);
+    };
 
     return (
         <div style={{ padding: 20 }}>
-            <h2>Your Workouts</h2>
-            <WorkoutForm onCreated={load} />
-            <WorkoutList workouts={workouts} onDeleted={load} />
+            <h1>Dashboard</h1>
+            <div style={{ display: "flex", gap: 20 }}>
+                {/* Left side: browse exercises */}
+                <div style={{ flex: 2 }}>
+                    <h2>Browse Exercises</h2>
+                    <ExerciseList onAddToWorkout={handleAddClick} />
+                </div>
+
+                {/* Right side: workouts */}
+                <div style={{ flex: 1 }}>
+                    <h2>Your Workouts</h2>
+                    <WorkoutList />
+                </div>
+            </div>
+
+            {/* Add to workout modal */}
+            {showModal && (
+                <AddToWorkoutModal 
+                    exercise={selectedExercise}
+                    onClose={closeModal}
+                />
+            )}
         </div>
     );
 };
