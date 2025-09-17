@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import ThemeToggleButton from "./ThemeToggleButton";
 
 export default function Navbar() {
     const { user, logout } = useContext(AuthContext);
@@ -19,18 +20,20 @@ export default function Navbar() {
                     borderBottom: "1px solid #eee",
                     display: "flex",
                     justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
                 }
             }
         >
             <div>
                 <Link to="/" style={{ marginRight: 12 }}>Home</Link>
             </div>
-            <div>
+            <div style={{ display: "flex", alignItems:"center", gap: 12 }}>
                 {user ? (
                     <>
                         <Link to="/dashboard">Dashboard</Link>
-                        <span style={{ marginRight: 12 }}>Hello, {user.name}</span>
-                        <button>Logout</button>
+                        <span>Hello, {user.name}</span>
+                        <button onClick={handleLogout}>Logout</button>
                     </>
                 ) : (
                     <>
@@ -38,6 +41,8 @@ export default function Navbar() {
                         <Link to="/signup">Sign up</Link>
                     </>
                 )}
+                {/* Theme toggle button */}
+                <ThemeToggleButton />
             </div>
         </nav>
     );
