@@ -1,33 +1,33 @@
 import React, { createContext, useEffect, useState } from "react";
 
-// Create the ThemeContext
+// Create ThemeContext
 export const ThemeContext = createContext();
 
-// ThemeProvider component to wrap the app
+// ThemeProvider wraps the app and provides theme state
 export const ThemeProvider = ({ children }) => {
-    const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("light"); // Current theme state
 
-    // Load saved theme from localStorage on mount
-    useEffect(() => {
-        const saved = localStorage.getItem("theme");
-        if (saved) {
-            setTheme(saved);
-            document.documentElement.setAttribute("data-theme", saved);
-        }
-    }, []);
+  // Load saved theme from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+  }, []);
 
-    // Toggle theme and persist to localStorage
-    const toggleTheme = () => {
-        const newTheme = theme === "light" ? "dark" : "light";
-        setTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
-        document.documentElement.setAttribute("data-theme", newTheme);
-    };
+  // Toggle theme and persist to localStorage
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+  };
 
-    // Properly wrap JSX in parentheses
-    return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
-        </ThemeContext.Provider>
-    );
+  // Return JSX with proper parentheses and no unused variables
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
