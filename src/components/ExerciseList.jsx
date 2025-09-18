@@ -110,7 +110,7 @@ const ExerciseList = ({ onAddToWorkout }) => {
                                 <ExerciseCard exercise={exercise} />
                                 {onAddToWorkout && (
                                     <button className="btn" style={{ marginTop: 8 }} onClick={() => onAddToWorkout(exercise)}>
-                                        Add to Workout
+                                        Select for Add to Workout
                                     </button>
                                 )}
                             </div>

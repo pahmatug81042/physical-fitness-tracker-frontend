@@ -5,18 +5,15 @@ import AddToWorkoutModal from "../components/AddToWorkoutModal";
 import WorkoutForm from "../components/WorkoutForm";
 
 export default function Dashboard() {
-    const [showModal, setShowModal] = useState(false);
     const [selectedExercise, setSelectedExercise] = useState(null);
     const [showWorkoutForm, setShowWorkoutForm] = useState(false);
     const [workoutRefreshKey, setWorkoutRefreshKey] = useState(0);
 
     const handleAddClick = (exercise) => {
         setSelectedExercise(exercise);
-        setShowModal(true);
     };
 
-    const closeModal = () => {
-        setShowModal(false);
+    const clearSelectedExercise = () => {
         setSelectedExercise(null);
     };
 
@@ -45,13 +42,24 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* Add to workout modal */}
-            {showModal && (
-                <AddToWorkoutModal 
-                    exercise={selectedExercise}
-                    onClose={closeModal}
-                />
-            )}
+            {/* Dedicated Add to Workout section */}
+            <div style={{ marginTop: 32 }}>
+                <h2>Add Exercise to Workout</h2>
+                {selectedExercise ? (
+                    <>
+                        <div style={{ marginBottom: 12 }}>
+                            <strong>Selected Exercise:</strong> {selectedExercise.name}
+                            <button className="btn" style={{ marginLeft: 12 }} onClick={clearSelectedExercise}>Clear</button>
+                        </div>
+                        <AddToWorkoutModal 
+                            exerciseId={selectedExercise.id || selectedExercise._id}
+                            onClose={clearSelectedExercise}
+                        />
+                    </>
+                ) : (
+                    <p>Select an exercise from the left to add it to a workout.</p>
+                )}
+            </div>
 
             {/* Workout form modal */}
             {showWorkoutForm && (
