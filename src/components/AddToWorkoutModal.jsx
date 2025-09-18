@@ -3,7 +3,7 @@ import { addExerciseToWorkout, getWorkouts } from "../services/workoutService";
 
 export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
     const [workouts, setWorkouts] = useState([]);
-    const [selectedWorkout, setSelectedWorkout] = useSate("");
+    const [selectedWorkout, setSelectedWorkout] = useState("");
     const [sets, setSets] = useState(0);
     const [reps, setReps] = useState(0);
     const [duration, setDuration] = useState(0);

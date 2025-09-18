@@ -7,7 +7,7 @@ import {
 } from "../services/exerciseService";
 import ExerciseCard from "./ExerciseCard";
 
-const ExerciseList = () => {
+const ExerciseList = ({ onAddToWorkout }) => {
     // State for exercises
     const [exercises, setExercises] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -106,7 +106,14 @@ const ExerciseList = () => {
                 <div className="exercise-grid">
                     {exercises.length > 0 ? (
                         exercises.map((exercise) => (
-                            <ExerciseCard key={exercise.id} exercise={exercise} />
+                            <div key={exercise.id}>
+                                <ExerciseCard exercise={exercise} />
+                                {onAddToWorkout && (
+                                    <button className="btn" style={{ marginTop: 8 }} onClick={() => onAddToWorkout(exercise)}>
+                                        Add to Workout
+                                    </button>
+                                )}
+                            </div>
                         ))
                     ) : (
                         <p>No exercises found.</p>

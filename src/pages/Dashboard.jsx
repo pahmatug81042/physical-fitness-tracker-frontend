@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
 import AddToWorkoutModal from "../components/AddToWorkoutModal";
+import WorkoutForm from "../components/WorkoutForm";
 
 export default function Dashboard() {
     const [showModal, setShowModal] = useState(false);
     const [selectedExercise, setSelectedExercise] = useState(null);
+    const [showWorkoutForm, setShowWorkoutForm] = useState(false);
 
     const handleAddClick = (exercise) => {
         setSelectedExercise(exercise);
@@ -31,6 +33,9 @@ export default function Dashboard() {
                 <div style={{ flex: 1 }}>
                     <h2>Your Workouts</h2>
                     <WorkoutList />
+                    <button className="btn btn-primary" style={{ marginTop: 16 }} onClick={() => setShowWorkoutForm(true)}>
+                        Add Workout
+                    </button>
                 </div>
             </div>
 
@@ -40,6 +45,18 @@ export default function Dashboard() {
                     exercise={selectedExercise}
                     onClose={closeModal}
                 />
+            )}
+
+            {/* Workout form modal */}
+            {showWorkoutForm && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <WorkoutForm />
+                        <button className="btn" style={{ marginTop: 12 }} onClick={() => setShowWorkoutForm(false)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );
