@@ -2,7 +2,7 @@
 import apiClient from "../utils/apiClient";
 
 export const createWorkout = (payload) =>
-  apiClient("/workouts", {
+  apiClient("/api/workouts", {
     method: "POST",
     body: JSON.stringify(payload),
   });
