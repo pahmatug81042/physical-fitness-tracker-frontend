@@ -1,6 +1,6 @@
 // src/components/WorkoutForm.jsx
 import React, { useState } from "react";
-import { createWorkout } from "../services/workoutService";
+import apiClient from "../apiClient";
 
 export default function WorkoutForm({ onWorkoutCreated }) {
   const [title, setTitle] = useState("");
@@ -8,25 +8,25 @@ export default function WorkoutForm({ onWorkoutCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title) return alert("Please enter a workout name");
-
     try {
       const payload = { title, date };
-      const workout = await createWorkout(payload);
-      if (onWorkoutCreated) onWorkoutCreated(workout);
+      const workout = await apiClient("/workouts", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      onWorkoutCreated?.(workout);
       setTitle("");
       setDate("");
-      alert("Workout created successfully!");
     } catch (error) {
       console.error("Failed to create workout:", error);
-      alert(`Failed to create workout: ${error.message}`);
+      alert("Failed to create workout: " + error.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} style={{ marginBottom: 20 }}>
       <h3>Create Workout</h3>
-      <div style={{ marginBottom: 8 }}>
+      <div>
         <label>Workout Name: </label>
         <input
           type="text"
@@ -36,7 +36,7 @@ export default function WorkoutForm({ onWorkoutCreated }) {
           required
         />
       </div>
-      <div style={{ marginBottom: 12 }}>
+      <div>
         <label>Date: </label>
         <input
           type="date"
@@ -44,9 +44,7 @@ export default function WorkoutForm({ onWorkoutCreated }) {
           onChange={(e) => setDate(e.target.value)}
         />
       </div>
-      <button type="submit" className="btn btn-primary">
-        Create Workout
-      </button>
+      <button type="submit">Create Workout</button>
     </form>
   );
 }
