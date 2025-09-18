@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   // Return JSX with all defined variables used
   return (
     <AuthContext.Provider
-      value={{ user, setUser, login, logout, loadingAuth, registerUser}}
+      values={{ user, setUser, login, logout, loadingAuth, registerUser}}
     >
       {children}
     </AuthContext.Provider>

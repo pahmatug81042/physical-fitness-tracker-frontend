@@ -26,7 +26,7 @@ export const ThemeProvider = ({ children }) => {
 
   // Return JSX with proper parentheses and no unused variables
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider values={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
