@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import { getMe, login as loginService, register as registerService } from "../services/authService";
 
-// Create the AuthContext
+// Create AuthContext
 export const AuthContext = createContext();
 
-// AuthProvider wraps the app and provides auth state
+// AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // logged-in user state
-  const [loadingAuth, setLoadingAuth] = useState(true); // loading state
+  const [user, setUser] = useState(null);       // Logged-in user state
+  const [loadingAuth, setLoadingAuth] = useState(true); // Loading state
 
   // Load user from backend if token exists
   const loadUser = async () => {
@@ -32,17 +32,24 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  // Login user: store token & set user state
-  const login = (token, userData) => {
-    localStorage.setItem("token", token);
-    setUser(userData);
+  // Login user: call backend login, store token & set user
+  const login = async (payload) => {
+    try {
+      const response = await loginService(payload); // Call backend login
+      const { token, ...userData } = response;
+      localStorage.setItem("token", token);
+      setUser(userData);
+      return userData;
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      throw error;
+    }
   };
 
   // Register user: call backend, store token & set user state
   const registerUser = async (payload) => {
     try {
       const response = await registerService(payload);
-      // Assuming the response returns user info + token
       const { token, ...userData } = response;
       localStorage.setItem("token", token);
       setUser(userData);
@@ -53,13 +60,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout user: remove token & reset user state
+  // Logout user: remove token & reset state
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
   };
 
-  // Return wrapped in parentheses for JSX safety
+  // Return JSX with all defined variables used
   return (
     <AuthContext.Provider
       value={{
