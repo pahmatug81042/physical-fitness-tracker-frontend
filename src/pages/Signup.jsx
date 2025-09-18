@@ -18,7 +18,7 @@ export default function Signup() {
             const { token, ...userData } = response;
             localStorage.setItem("token", token);
             setUser(userData);
-            navigate("/dashboard");
+            navigate("/login");
         } catch (err) {
             setError(err.message);
         }
