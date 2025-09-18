@@ -35,7 +35,7 @@ const Home = () => {
           </Link>
         </div>
 
-        <p style={{ fontStyle: "italic", marginTop: "2rem" }}>
+        <p style={{ fontStyle: "italic", marginTop: "3rem" }}>
           Note: The backend server may take a few minutes to boot up on first deployment.
         </p>
       </section>
