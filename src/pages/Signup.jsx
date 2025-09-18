@@ -7,16 +7,18 @@ export default function Signup() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { login } = useContext(AuthContext);
+    const { setUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await registerApi({ name, email, password });
-            localStorage.setItem("token", data.token);
-            navigate("/login");
+            const response = await registerApi({ name, email, password });
+            const { token, ...userData } = response;
+            localStorage.setItem("token", token);
+            setUser(userData);
+            navigate("/dashboard");
         } catch (err) {
             setError(err.message);
         }

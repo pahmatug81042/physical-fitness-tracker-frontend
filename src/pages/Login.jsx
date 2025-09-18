@@ -13,14 +13,10 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await loginApi({ email, password });
-            // backend returns token and user info: adjust if different
-            localStorage.setItem("token", data.token);
-            login(data.token, {
-                _id: data._id,
-                name: data.name,
-                email: data.email,
-            });
+            const response = await loginApi({ email, password });
+            const { token, ...userData } = response;
+            localStorage.setItem("token", token);
+            login(userData);
             navigate("/dashboard");
         } catch (err) {
             setError(err.message)
