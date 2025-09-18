@@ -32,10 +32,10 @@ export default function Login() {
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div>
-                    <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 { error && <div style={{ color: "red" }}>{error}</div> }
                 <button type="submit">Login</button>

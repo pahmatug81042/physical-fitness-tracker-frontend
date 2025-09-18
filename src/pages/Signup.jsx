@@ -32,13 +32,13 @@ export default function Signup() {
             <h2>Sign up</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                    <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div>
-                    <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div>
-                    <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input type= "password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 {error && <div style={{ color: "red" }}>{error}</div>}
                 <button type="submit">Sign up</button>
