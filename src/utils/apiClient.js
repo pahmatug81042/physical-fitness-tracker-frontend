@@ -1,5 +1,7 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+// src/api/apiClient.js
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""; // Use env variable for backend URL
 
+// Retrieve JWT token from localStorage
 const getToken = () => localStorage.getItem("token");
 
 const apiClient = async (endpoint, options = {}) => {
@@ -7,10 +9,12 @@ const apiClient = async (endpoint, options = {}) => {
     const headers = {
         "Content-Type": "application/json",
         ...(options.headers || {}),
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}), // attach token if available
     };
 
-    const res = await fetch(`${API_BASE_URL.replace(/\/$/, "")}${endpoint}`, {
+    const url = `${API_BASE_URL.replace(/\/$/, "")}${endpoint}`;
+
+    const res = await fetch(url, {
         headers,
         ...options,
     });
@@ -23,8 +27,7 @@ const apiClient = async (endpoint, options = {}) => {
         throw err;
     }
 
-    // Try to return json, if no content, return null
-    if (res.status === 204) return null;
+    if (res.status === 204) return null; // no content
     return res.json().catch(() => null);
 };
 
