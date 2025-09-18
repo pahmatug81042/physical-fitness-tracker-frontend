@@ -24,7 +24,7 @@ export const ThemeProvider = ({ children }) => {
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
-  // Fixed: use `value` instead of `values`
+  // Use `value` correctly
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}

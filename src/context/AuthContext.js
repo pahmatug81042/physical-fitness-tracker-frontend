@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Fixed: use `value` instead of `values`
+  // Use `value` correctly
   return (
     <AuthContext.Provider
       value={{ user, setUser, login, logout, loadingAuth, registerUser }}
