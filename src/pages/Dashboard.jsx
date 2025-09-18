@@ -8,6 +8,7 @@ export default function Dashboard() {
     const [showModal, setShowModal] = useState(false);
     const [selectedExercise, setSelectedExercise] = useState(null);
     const [showWorkoutForm, setShowWorkoutForm] = useState(false);
+    const [workoutRefreshKey, setWorkoutRefreshKey] = useState(0);
 
     const handleAddClick = (exercise) => {
         setSelectedExercise(exercise);
@@ -17,6 +18,11 @@ export default function Dashboard() {
     const closeModal = () => {
         setShowModal(false);
         setSelectedExercise(null);
+    };
+
+    const handleWorkoutCreated = () => {
+        setWorkoutRefreshKey((k) => k + 1);
+        setShowWorkoutForm(false);
     };
 
     return (
@@ -32,7 +38,7 @@ export default function Dashboard() {
                 {/* Right side: workouts */}
                 <div style={{ flex: 1 }}>
                     <h2>Your Workouts</h2>
-                    <WorkoutList />
+                    <WorkoutList key={workoutRefreshKey} />
                     <button className="btn btn-primary" style={{ marginTop: 16 }} onClick={() => setShowWorkoutForm(true)}>
                         Add Workout
                     </button>
@@ -51,7 +57,7 @@ export default function Dashboard() {
             {showWorkoutForm && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <WorkoutForm />
+                        <WorkoutForm onWorkoutCreated={handleWorkoutCreated} />
                         <button className="btn" style={{ marginTop: 12 }} onClick={() => setShowWorkoutForm(false)}>
                             Close
                         </button>

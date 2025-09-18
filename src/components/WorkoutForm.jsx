@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { createWorkout } from "../services/workoutService";
 
-export default function workoutForm({ onWorkoutCreated }) {
+export default function WorkoutForm({ onWorkoutCreated }) {
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
 
@@ -10,7 +10,7 @@ export default function workoutForm({ onWorkoutCreated }) {
         try {
             const payload = { title, date };
             const workout = await createWorkout(payload);
-            onWorkoutCreated(workout);
+            if (onWorkoutCreated) onWorkoutCreated(workout);
             setTitle("");
             setDate("");
         } catch (error) {
