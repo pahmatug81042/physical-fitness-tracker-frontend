@@ -16,11 +16,6 @@ export default function Signup() {
         try {
             const data = await registerApi({ name, email, password });
             localStorage.setItem("token", data.token);
-            login(data.token, {
-                _id: user._id,
-                name: data.name,
-                email: data.email,
-            });
             navigate("/login");
         } catch (err) {
             setError(err.message);
