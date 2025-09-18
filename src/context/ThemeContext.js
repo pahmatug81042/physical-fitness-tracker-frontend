@@ -24,9 +24,9 @@ export const ThemeProvider = ({ children }) => {
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
-  // Return JSX with proper parentheses and no unused variables
+  // Fixed: use `value` instead of `values`
   return (
-    <ThemeContext.Provider values={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);       // Logged-in user state
+  const [user, setUser] = useState(null); // Logged-in user state
   const [loadingAuth, setLoadingAuth] = useState(true); // Loading state
 
   // Load user from backend if token exists
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   // Login user: call backend login, store token & set user
   const login = async (payload) => {
     try {
-      const response = await loginService(payload); // Call backend login
+      const response = await loginService(payload);
       const { token, ...userData } = response;
       localStorage.setItem("token", token);
       setUser(userData);
@@ -66,10 +66,10 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Return JSX with all defined variables used
+  // Fixed: use `value` instead of `values`
   return (
     <AuthContext.Provider
-      values={{ user, setUser, login, logout, loadingAuth, registerUser}}
+      value={{ user, setUser, login, logout, loadingAuth, registerUser }}
     >
       {children}
     </AuthContext.Provider>
