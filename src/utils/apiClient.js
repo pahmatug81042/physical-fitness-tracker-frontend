@@ -1,4 +1,4 @@
-// src/apiClient.js
+// src/utils/apiClient.js
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
 const getToken = () => localStorage.getItem("token");
@@ -11,9 +11,7 @@ const apiClient = async (endpoint, options = {}) => {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const url = `${API_BASE_URL.replace(/\/$/, "")}${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
-
-  const res = await fetch(url, {
+  const res = await fetch(`${API_BASE_URL.replace(/\/$/, "")}${endpoint}`, {
     headers,
     ...options,
   });

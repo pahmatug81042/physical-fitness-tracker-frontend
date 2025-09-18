@@ -11,7 +11,7 @@ export default function WorkoutForm({ onWorkoutCreated }) {
     try {
       const payload = { title, date };
       const workout = await createWorkout(payload);
-      if (onWorkoutCreated) onWorkoutCreated(workout);
+      onWorkoutCreated?.(workout); // Refresh dashboard immediately
       setTitle("");
       setDate("");
     } catch (error) {

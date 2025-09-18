@@ -1,10 +1,7 @@
+// src/components/WorkoutList.jsx
 import React, { useEffect, useState } from "react";
 import { getWorkouts } from "../services/workoutService";
 
-/**
- * WorkoutList component
- * Re-fetches workouts whenever refreshKey changes
- */
 export default function WorkoutList({ refreshKey = 0 }) {
   const [workouts, setWorkouts] = useState([]);
 
@@ -19,7 +16,7 @@ export default function WorkoutList({ refreshKey = 0 }) {
 
   useEffect(() => {
     loadWorkouts();
-  }, [refreshKey]); // re-fetch when refreshKey changes
+  }, [refreshKey]);
 
   if (!workouts || workouts.length === 0) {
     return (
@@ -47,16 +44,9 @@ export default function WorkoutList({ refreshKey = 0 }) {
           <h3>{workout.title}</h3>
           <p>Date: {workout.date ? new Date(workout.date).toLocaleDateString() : "No date set"}</p>
           <div>
-            {workout.exercises && workout.exercises.length > 0 ? (
-              workout.exercises.map((ex, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    padding: 6,
-                    borderBottom: "1px solid #eee",
-                    fontSize: 14,
-                  }}
-                >
+            {workout.exercise && workout.exercise.length > 0 ? (
+              workout.exercise.map((ex, idx) => (
+                <div key={idx} style={{ padding: 6, borderBottom: "1px solid #eee", fontSize: 14 }}>
                   <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets: {ex.sets ?? 0} | Reps: {ex.reps ?? 0} | Duration: {ex.duration ?? 0} min
                 </div>
               ))

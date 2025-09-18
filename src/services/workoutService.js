@@ -7,7 +7,7 @@ export const createWorkout = (payload) =>
     body: JSON.stringify(payload),
   });
 
-export const getWorkouts = () => apiClient("/api/workouts/");
+export const getWorkouts = () => apiClient("/api/workouts");
 
 export const getWorkoutById = (id) => apiClient(`/api/workouts/${id}`);
 
@@ -20,5 +20,9 @@ export const updateWorkout = (id, payload) =>
 export const deleteWorkout = (id) =>
   apiClient(`/api/workouts/${id}`, { method: "DELETE" });
 
+// ✅ Correctly add exercise to workout via backend endpoint
 export const addExerciseToWorkout = (workoutId, exerciseData) =>
-  updateWorkout(workoutId, { exercises: [exerciseData] });
+  apiClient(`/api/workouts/${workoutId}/exercises`, {
+    method: "PUT",
+    body: JSON.stringify(exerciseData),
+});

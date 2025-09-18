@@ -1,6 +1,6 @@
 // src/components/AddToWorkoutModal.jsx
-import React, { useState, useEffect } from "react";
-import { getWorkouts, addExerciseToWorkout } from "../services/workoutService";
+import React, { useEffect, useState } from "react";
+import { addExerciseToWorkout, getWorkouts } from "../services/workoutService";
 
 export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
   const [workouts, setWorkouts] = useState([]);
@@ -32,7 +32,7 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
         reps,
         duration,
       });
-      onAdded?.();
+      onAdded?.(); // Trigger parent refresh
       onClose();
     } catch (error) {
       console.error(error);
@@ -48,7 +48,7 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backgroundColor: "rgba(0,0,0,0.5)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

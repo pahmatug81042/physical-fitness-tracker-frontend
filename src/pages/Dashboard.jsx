@@ -1,3 +1,4 @@
+// src/pages/Dashboard.jsx
 import React, { useState } from "react";
 import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
@@ -9,38 +10,19 @@ export default function Dashboard() {
   const [showWorkoutForm, setShowWorkoutForm] = useState(false);
   const [workoutRefreshKey, setWorkoutRefreshKey] = useState(0);
 
-  // When user clicks "Add to Workout"
-  const handleAddClick = (exercise) => {
-    setSelectedExercise(exercise);
-  };
-
-  // Clear selected exercise
-  const clearSelectedExercise = () => {
-    setSelectedExercise(null);
-  };
-
-  // Called after creating a new workout
-  const handleWorkoutCreated = () => {
-    setWorkoutRefreshKey((prev) => prev + 1); // trigger WorkoutList refresh
-    setShowWorkoutForm(false); // close modal
-  };
-
-  // Called after adding exercise to a workout
-  const handleExerciseAdded = () => {
-    setWorkoutRefreshKey((prev) => prev + 1); // refresh WorkoutList
-  };
+  const handleAddClick = (exercise) => setSelectedExercise(exercise);
+  const clearSelectedExercise = () => setSelectedExercise(null);
+  const handleWorkoutCreated = () => setWorkoutRefreshKey((k) => k + 1);
 
   return (
     <div style={{ padding: 20 }}>
       <h1>Dashboard</h1>
       <div style={{ display: "flex", gap: 20 }}>
-        {/* Left side: browse exercises */}
         <div style={{ flex: 2 }}>
           <h2>Browse Exercises</h2>
           <ExerciseList onAddToWorkout={handleAddClick} />
         </div>
 
-        {/* Right side: workouts */}
         <div style={{ flex: 1 }}>
           <h2>Your Workouts</h2>
           <WorkoutList key={workoutRefreshKey} refreshKey={workoutRefreshKey} />
@@ -54,25 +36,36 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Add to Workout Modal */}
-      {selectedExercise && (
-        <AddToWorkoutModal
-          exerciseId={selectedExercise.id || selectedExercise._id}
-          onClose={clearSelectedExercise}
-          onAdded={handleExerciseAdded}
-        />
-      )}
+      <div style={{ marginTop: 32 }}>
+        <h2>Add Exercise to Workout</h2>
+        {selectedExercise ? (
+          <>
+            <div style={{ marginBottom: 12 }}>
+              <strong>Selected Exercise:</strong> {selectedExercise.name}
+              <button
+                className="btn"
+                style={{ marginLeft: 12 }}
+                onClick={clearSelectedExercise}
+              >
+                Clear
+              </button>
+            </div>
+            <AddToWorkoutModal
+              exerciseId={selectedExercise.id || selectedExercise._id}
+              onClose={clearSelectedExercise}
+              onAdded={handleWorkoutCreated} // refresh workouts after adding
+            />
+          </>
+        ) : (
+          <p>Select an exercise from the left to add it to a workout.</p>
+        )}
+      </div>
 
-      {/* Workout creation modal */}
       {showWorkoutForm && (
         <div className="modal-overlay">
           <div className="modal-content">
             <WorkoutForm onWorkoutCreated={handleWorkoutCreated} />
-            <button
-              className="btn"
-              style={{ marginTop: 12 }}
-              onClick={() => setShowWorkoutForm(false)}
-            >
+            <button className="btn" style={{ marginTop: 12 }} onClick={() => setShowWorkoutForm(false)}>
               Close
             </button>
           </div>
