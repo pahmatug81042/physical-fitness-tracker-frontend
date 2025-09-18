@@ -1,5 +1,5 @@
 // src/services/workoutService.js
-import apiClient from "../api/apiClient";
+import apiClient from "../utils/apiClient";
 
 /**
  * Get all workouts for the logged-in user
