@@ -11,7 +11,10 @@ export const ThemeProvider = ({ children }) => {
     const saved = localStorage.getItem("theme");
     if (saved) {
       setTheme(saved);
-      document.documentElement.setAttribute("data-theme", saved);
+      document.body.classList.remove("light", "dark");
+      document.body.classList.add(saved);
+    } else {
+      document.body.classList.add("light");
     }
   }, []);
 
@@ -19,7 +22,8 @@ export const ThemeProvider = ({ children }) => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(newTheme);
   };
 
   return (
