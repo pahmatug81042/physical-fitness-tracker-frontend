@@ -3,11 +3,10 @@ import React, { createContext, useEffect, useState } from "react";
 // Create ThemeContext
 export const ThemeContext = createContext();
 
-// ThemeProvider wraps the app and provides theme state
+// ThemeProvider wraps the app
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light"); // Current theme state
+  const [theme, setTheme] = useState("light");
 
-  // Load saved theme from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     if (saved) {
@@ -16,7 +15,6 @@ export const ThemeProvider = ({ children }) => {
     }
   }, []);
 
-  // Toggle theme and persist to localStorage
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
@@ -24,7 +22,6 @@ export const ThemeProvider = ({ children }) => {
     document.documentElement.setAttribute("data-theme", newTheme);
   };
 
-  // Use `value` correctly
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}

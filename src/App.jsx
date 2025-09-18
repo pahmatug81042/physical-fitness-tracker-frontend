@@ -8,10 +8,9 @@ import ExerciseDetail from "./pages/ExerciseDetail";
 import Dashboard from "./pages/Dashboard";
 import ExerciseList from "./components/ExerciseList";
 import WorkoutList from "./components/WorkoutList";
-import workoutForm from "./components/WorkoutForm";
+import WorkoutForm from "./components/WorkoutForm";
 import { AuthContext } from "./context/AuthContext";
 import "./App.css";
-import { defaultClientConditions } from "vite";
 
 // Wrapper for protecting private routes
 const PrivateRoute = ({ children }) => {
@@ -55,7 +54,7 @@ function App() {
           path="/workouts/new"
           element={
             <PrivateRoute>
-              <workoutForm />
+              <WorkoutForm />
             </PrivateRoute>
           }
         />

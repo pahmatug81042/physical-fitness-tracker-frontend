@@ -10,63 +10,52 @@ export const AuthProvider = ({ children }) => {
   const [loadingAuth, setLoadingAuth] = useState(true); // Loading state
 
   // Load user from backend if token exists
-  const loadUser = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLoadingAuth(false);
-      return;
-    }
-    try {
-      const data = await getMe();
-      setUser(data);
-    } catch (error) {
-      console.warn("Auth load failed:", error.message);
-      localStorage.removeItem("token");
-      setUser(null);
-    } finally {
-      setLoadingAuth(false);
-    }
-  };
-
   useEffect(() => {
+    const loadUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setLoadingAuth(false);
+        return;
+      }
+      try {
+        const data = await getMe();
+        setUser(data);
+      } catch (error) {
+        console.warn("Auth load failed:", error.message);
+        localStorage.removeItem("token");
+        setUser(null);
+      } finally {
+        setLoadingAuth(false);
+      }
+    };
     loadUser();
   }, []);
 
-  // Login user: call backend login, store token & set user
+  // Login user
   const login = async (payload) => {
-    try {
-      const response = await loginService(payload);
-      const { token, ...userData } = response;
-      localStorage.setItem("token", token);
-      setUser(userData);
-      return userData;
-    } catch (error) {
-      console.error("Login failed:", error.message);
-      throw error;
-    }
+    const response = await loginService(payload);
+    const { token, ...userData } = response;
+    localStorage.setItem("token", token);
+    setUser(userData);
+    return userData;
   };
 
-  // Register user: call backend, store token & set user state
+  // Register user
   const registerUser = async (payload) => {
-    try {
-      const response = await registerService(payload);
-      const { token, ...userData } = response;
-      localStorage.setItem("token", token);
-      setUser(userData);
-      return userData;
-    } catch (error) {
-      console.error("Registration failed:", error.message);
-      throw error;
-    }
+    const response = await registerService(payload);
+    const { token, ...userData } = response;
+    localStorage.setItem("token", token);
+    setUser(userData);
+    return userData;
   };
 
-  // Logout user: remove token & reset state
+  // Logout user
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
   };
 
-  // Use `value` correctly
+  // Return provider
   return (
     <AuthContext.Provider
       value={{ user, setUser, login, logout, loadingAuth, registerUser }}
