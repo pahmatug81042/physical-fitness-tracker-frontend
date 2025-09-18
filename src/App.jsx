@@ -15,7 +15,7 @@ import "./App.css";
 // Wrapper for protecting private routes
 const PrivateRoute = ({ children }) => {
   const { user, loadingAuth } = useContext(AuthContext);
-  if (!loadingAuth) return <div>Loading...</div>
+  if (loadingAuth) return <div>Loading...</div>;
   return user ? children : <Navigate to="/login" />;
 };
 

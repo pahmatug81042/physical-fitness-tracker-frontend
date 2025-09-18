@@ -14,22 +14,20 @@ export default function Navbar() {
 
     return (
         <nav
-            style={
-                {
-                    padding: 12,
-                    borderBottom: "1px solid #eee",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                }
-            }
+            style={{
+                padding: 12,
+                borderBottom: "1px solid #eee",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+            }}
         >
             <div>
                 <Link to="/" style={{ marginRight: 12 }}>Home</Link>
             </div>
-            <div style={{ display: "flex", alignItems:"center", gap: 12 }}>
-                {user ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                {user && user.name ? (
                     <>
                         <Link to="/dashboard">Dashboard</Link>
                         <span>Hello, {user.name}</span>
