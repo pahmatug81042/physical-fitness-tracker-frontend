@@ -14,8 +14,7 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await registerApi({ name, email, password });
-            setUser(response);
+            await registerApi({ name, email, password });
             navigate("/login");
         } catch (err) {
             setError(err.message);
