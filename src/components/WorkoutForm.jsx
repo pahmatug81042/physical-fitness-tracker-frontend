@@ -1,6 +1,6 @@
 // src/components/WorkoutForm.jsx
 import React, { useState } from "react";
-import apiClient from "../apiClient";
+import apiClient from "../utils/apiClient";
 
 export default function WorkoutForm({ onWorkoutCreated }) {
   const [title, setTitle] = useState("");
