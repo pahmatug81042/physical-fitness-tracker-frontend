@@ -13,10 +13,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await loginApi({ email, password });
-            const { token, ...userData } = response;
-            localStorage.setItem("token", token);
-            login(userData);
+            await login({ email, password });
             navigate("/dashboard");
         } catch (err) {
             setError(err.message)
