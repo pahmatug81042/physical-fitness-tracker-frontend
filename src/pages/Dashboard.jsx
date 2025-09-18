@@ -10,14 +10,21 @@ export default function Dashboard() {
   const [showWorkoutForm, setShowWorkoutForm] = useState(false);
   const [workoutRefreshKey, setWorkoutRefreshKey] = useState(0);
 
-  const handleAddClick = (exercise) => setSelectedExercise(exercise);
-  const clearSelectedExercise = () => setSelectedExercise(null);
+  const handleAddClick = (exercise) => {
+    setSelectedExercise(exercise);
+  };
 
-  const refreshWorkouts = () => setWorkoutRefreshKey((k) => k + 1);
+  const clearSelectedExercise = () => {
+    setSelectedExercise(null);
+  };
 
   const handleWorkoutCreated = () => {
-    refreshWorkouts();
+    setWorkoutRefreshKey((k) => k + 1);
     setShowWorkoutForm(false);
+  };
+
+  const handleExerciseAdded = () => {
+    setWorkoutRefreshKey((k) => k + 1);
   };
 
   return (
@@ -31,7 +38,7 @@ export default function Dashboard() {
 
         <div style={{ flex: 1 }}>
           <h2>Your Workouts</h2>
-          <WorkoutList key={workoutRefreshKey} />
+          <WorkoutList key={workoutRefreshKey} refreshKey={workoutRefreshKey} />
           <button
             className="btn btn-primary"
             style={{ marginTop: 16 }}
@@ -43,24 +50,11 @@ export default function Dashboard() {
       </div>
 
       {selectedExercise && (
-        <div style={{ marginTop: 32 }}>
-          <h2>Add Exercise to Workout</h2>
-          <div style={{ marginBottom: 12 }}>
-            <strong>Selected Exercise:</strong> {selectedExercise.name}
-            <button
-              className="btn"
-              style={{ marginLeft: 12 }}
-              onClick={clearSelectedExercise}
-            >
-              Clear
-            </button>
-          </div>
-          <AddToWorkoutModal
-            exerciseId={selectedExercise.id || selectedExercise._id}
-            onClose={clearSelectedExercise}
-            onAdded={refreshWorkouts}
-          />
-        </div>
+        <AddToWorkoutModal
+          exerciseId={selectedExercise.id || selectedExercise._id}
+          onClose={clearSelectedExercise}
+          onAdded={handleExerciseAdded}
+        />
       )}
 
       {showWorkoutForm && (

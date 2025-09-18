@@ -1,7 +1,6 @@
 // src/apiClient.js
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
-// Retrieve JWT token from localStorage
 const getToken = () => localStorage.getItem("token");
 
 const apiClient = async (endpoint, options = {}) => {
@@ -12,7 +11,9 @@ const apiClient = async (endpoint, options = {}) => {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const res = await fetch(`${API_BASE_URL.replace(/\/$/, "")}${endpoint}`, {
+  const url = `${API_BASE_URL.replace(/\/$/, "")}${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+
+  const res = await fetch(url, {
     headers,
     ...options,
   });
@@ -25,7 +26,8 @@ const apiClient = async (endpoint, options = {}) => {
     throw err;
   }
 
-  return res.status === 204 ? null : res.json().catch(() => null);
+  if (res.status === 204) return null;
+  return res.json().catch(() => null);
 };
 
 export default apiClient;

@@ -1,6 +1,6 @@
 // src/components/WorkoutForm.jsx
 import React, { useState } from "react";
-import apiClient from "../utils/apiClient";
+import { createWorkout } from "../services/workoutService";
 
 export default function WorkoutForm({ onWorkoutCreated }) {
   const [title, setTitle] = useState("");
@@ -10,16 +10,13 @@ export default function WorkoutForm({ onWorkoutCreated }) {
     e.preventDefault();
     try {
       const payload = { title, date };
-      const workout = await apiClient("/workouts", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
-      onWorkoutCreated?.(workout);
+      const workout = await createWorkout(payload);
+      if (onWorkoutCreated) onWorkoutCreated(workout);
       setTitle("");
       setDate("");
     } catch (error) {
       console.error("Failed to create workout:", error);
-      alert("Failed to create workout: " + error.message);
+      alert(`Failed to create workout: ${error.message}`);
     }
   };
 

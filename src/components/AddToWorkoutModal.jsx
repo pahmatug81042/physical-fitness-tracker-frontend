@@ -1,6 +1,6 @@
 // src/components/AddToWorkoutModal.jsx
 import React, { useState, useEffect } from "react";
-import apiClient from "../utils/apiClient";
+import { getWorkouts, addExerciseToWorkout } from "../services/workoutService";
 
 export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
   const [workouts, setWorkouts] = useState([]);
@@ -9,14 +9,13 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
   const [reps, setReps] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Load workouts from backend
   useEffect(() => {
     const loadWorkouts = async () => {
       try {
-        const data = await apiClient("/workouts");
+        const data = await getWorkouts();
         setWorkouts(data);
       } catch (error) {
-        console.error("Failed to load workouts:", error);
+        console.error(error);
       }
     };
     loadWorkouts();
@@ -27,15 +26,17 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
     if (!selectedWorkout) return alert("Please select a workout");
 
     try {
-      await apiClient(`/workouts/${selectedWorkout}`, {
-        method: "PUT",
-        body: JSON.stringify({ exerciseId, sets, reps, duration }),
+      await addExerciseToWorkout(selectedWorkout, {
+        exerciseId,
+        sets,
+        reps,
+        duration,
       });
       onAdded?.();
       onClose();
     } catch (error) {
-      console.error("Failed to add exercise:", error);
-      alert("Failed to add exercise: " + error.message);
+      console.error(error);
+      alert(`Failed to add exercise: ${error.message}`);
     }
   };
 
