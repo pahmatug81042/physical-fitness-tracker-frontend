@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Run once on mount
   useEffect(() => {
     loadUser();
   }, []);
@@ -60,9 +59,17 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Return wrapped in parentheses for JSX safety
   return (
     <AuthContext.Provider
-      value={{ user, setUser, login, logout, loadingAuth, registerUser }}
+      value={{
+        user,
+        setUser,
+        login,
+        logout,
+        loadingAuth,
+        registerUser
+      }}
     >
       {children}
     </AuthContext.Provider>
