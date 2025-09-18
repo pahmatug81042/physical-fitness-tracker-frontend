@@ -15,9 +15,7 @@ export default function Signup() {
         e.preventDefault();
         try {
             const response = await registerApi({ name, email, password });
-            const { token, ...userData } = response;
-            localStorage.setItem("token", token);
-            setUser(userData);
+            setUser(response);
             navigate("/login");
         } catch (err) {
             setError(err.message);
