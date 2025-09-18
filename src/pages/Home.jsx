@@ -7,7 +7,8 @@ const Home = () => {
             <section className="card" style={{ maxWidth: "800px", margin: "2rem auto" }}>
                 <h1>Welcome to the Fitness Tracker</h1>
                 <p style={{ margin: "1rem 0" }}>
-                    This Full Stack Fitness Tracker allowws you to browse exercises, track your workouts, and view exercise videos - all in one place.
+                    This full stack Fitness Tracker allows you to browse exercises, track your workouts, 
+                    and view exercise videos — all in one place.
                 </p>
                 <h2>Key Features</h2>
                 <ul style={{ textAlign: "left", margin: "1rem 0", listStyle: "disc inside" }}>
@@ -20,7 +21,7 @@ const Home = () => {
                 </ul>
                 <h2>Getting Started</h2>
                 <p style={{ margin: "1rem 0" }}>
-                    To get started, please {" "}
+                    To get started, please{" "}
                     <Link to="/signup" className="btn btn-primary">
                         Sign Up
                     </Link>{" "}

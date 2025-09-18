@@ -38,6 +38,7 @@ export default function Login() {
                     <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 { error && <div style={{ color: "red" }}>{error}</div> }
+                <button type="submit">Login</button>
             </form>
         </div>
     );
