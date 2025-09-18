@@ -35,7 +35,7 @@ export default function Signup() {
                     <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div>
-                    <input placeholder="Email" value={email} onChange={setEmail(e.target.value)} />
+                    <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div>
                     <input placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
