@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchExerciseById } from "../services/exerciseService";
-import { fetchVideosForExercise } from "../services/exerciseService";
+import { fetchVideosForExercise } from "../services/videoService";
 import ExerciseVideos from "../components/ExerciseVideos";
 import AddToWorkoutModal from "../components/AddToWorkoutModal";
 
