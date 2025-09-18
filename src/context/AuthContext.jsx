@@ -43,10 +43,8 @@ export const AuthProvider = ({ children }) => {
   // Register user
   const registerUser = async (payload) => {
     const response = await registerService(payload);
-    const { token, ...userData } = response;
-    localStorage.setItem("token", token);
-    setUser(userData);
-    return userData;
+    // Do not set token or user context on registration
+    return response;
   };
 
   // Logout user
