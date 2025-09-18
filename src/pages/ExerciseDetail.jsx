@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 import { fetchExerciseById } from "../services/exerciseService";
 import { fetchVideosForExercise } from "../services/videoService";
 import ExerciseVideos from "../components/ExerciseVideos";
-import AddToWorkoutModal from "../components/AddToWorkoutModal";
+// import AddToWorkoutModal from "../components/AddToWorkoutModal";
 
 export default function ExerciseDetail() {
     const { id } = useParams();
     const [exercise, setExercise] = useState(null);
     const [videos, setVideos] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -41,28 +41,9 @@ export default function ExerciseDetail() {
                 style={{ width: "100%", maxWidth: 760, borderRadius: 8 }}
             />
             <p>{exercise.description}</p>
-            <button
-                onClick={() => setModalOpen(true)}
-                style={
-                    {
-                        margin: "12px 0",
-                        padding: "6px 12px",
-                        borderRadius: 4,
-                        border: "none",
-                        backgroundColor: "007bff",
-                        color: "white",
-                        cursor: "pointer",
-                    }
-                }
-            >
-                Add to Workout
-            </button>
-            {modalOpen && (
-                <AddToWorkoutModal 
-                    exerciseId={exercise._id || exercise.id}
-                    onClose={() => setModalOpen(false)}
-                />
-            )}
+            <div style={{ margin: "12px 0", color: "#007bff", fontWeight: "bold" }}>
+                To add this exercise to a workout, go to the Dashboard and use the dedicated Add to Workout section.
+            </div>
             <h3>Tutorial Videos</h3>
             <ExerciseVideos exerciseVideos={videos} name={exercise.name} />
         </div>
