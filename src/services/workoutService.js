@@ -1,30 +1,50 @@
 // src/services/workoutService.js
-import apiClient from "../utils/apiClient";
+import apiClient from "../apiClient";
 
 /**
- * Get all workouts for the logged-in user
+ * Fetch all workouts for the logged-in user
  */
 export const getWorkouts = async () => {
-  return apiClient("/api/workouts");
+  return apiClient("/workouts");
 };
 
 /**
  * Create a new workout
- * payload = { title: string, date: string }
+ * @param {Object} payload { title, date }
  */
 export const createWorkout = async (payload) => {
-  return apiClient("/api/workouts", {
+  return apiClient("/workouts", {
     method: "POST",
     body: JSON.stringify(payload),
   });
 };
 
 /**
- * Add an exercise to a specific workout
+ * Add an exercise to an existing workout
+ * @param {string} workoutId - ID of the workout
+ * @param {Object} payload - { exerciseId, sets, reps, duration }
  */
-export const addExerciseToWorkout = async (workoutId, exerciseData) => {
-  return apiClient(`/api/workouts/${workoutId}/exercises`, {
-    method: "POST",
-    body: JSON.stringify(exerciseData),
+export const addExerciseToWorkout = async (workoutId, payload) => {
+  return apiClient(`/workouts/${workoutId}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+};
+
+/**
+ * Get a single workout by ID
+ * @param {string} workoutId
+ */
+export const getWorkoutById = async (workoutId) => {
+  return apiClient(`/workouts/${workoutId}`);
+};
+
+/**
+ * Delete a workout by ID
+ * @param {string} workoutId
+ */
+export const deleteWorkout = async (workoutId) => {
+  return apiClient(`/workouts/${workoutId}`, {
+    method: "DELETE",
   });
 };
