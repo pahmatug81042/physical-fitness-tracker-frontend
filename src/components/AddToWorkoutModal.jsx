@@ -1,6 +1,6 @@
 // src/components/AddToWorkoutModal.jsx
 import React, { useState, useEffect } from "react";
-import apiClient from "../apiClient";
+import apiClient from "../utils/apiClient";
 
 export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
   const [workouts, setWorkouts] = useState([]);
