@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import React, { useState } from "react";
 import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
@@ -10,32 +9,38 @@ export default function Dashboard() {
   const [showWorkoutForm, setShowWorkoutForm] = useState(false);
   const [workoutRefreshKey, setWorkoutRefreshKey] = useState(0);
 
+  // When user clicks "Add to Workout"
   const handleAddClick = (exercise) => {
     setSelectedExercise(exercise);
   };
 
+  // Clear selected exercise
   const clearSelectedExercise = () => {
     setSelectedExercise(null);
   };
 
+  // Called after creating a new workout
   const handleWorkoutCreated = () => {
-    setWorkoutRefreshKey((k) => k + 1);
-    setShowWorkoutForm(false);
+    setWorkoutRefreshKey((prev) => prev + 1); // trigger WorkoutList refresh
+    setShowWorkoutForm(false); // close modal
   };
 
+  // Called after adding exercise to a workout
   const handleExerciseAdded = () => {
-    setWorkoutRefreshKey((k) => k + 1);
+    setWorkoutRefreshKey((prev) => prev + 1); // refresh WorkoutList
   };
 
   return (
     <div style={{ padding: 20 }}>
       <h1>Dashboard</h1>
       <div style={{ display: "flex", gap: 20 }}>
+        {/* Left side: browse exercises */}
         <div style={{ flex: 2 }}>
           <h2>Browse Exercises</h2>
           <ExerciseList onAddToWorkout={handleAddClick} />
         </div>
 
+        {/* Right side: workouts */}
         <div style={{ flex: 1 }}>
           <h2>Your Workouts</h2>
           <WorkoutList key={workoutRefreshKey} refreshKey={workoutRefreshKey} />
@@ -49,6 +54,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Add to Workout Modal */}
       {selectedExercise && (
         <AddToWorkoutModal
           exerciseId={selectedExercise.id || selectedExercise._id}
@@ -57,6 +63,7 @@ export default function Dashboard() {
         />
       )}
 
+      {/* Workout creation modal */}
       {showWorkoutForm && (
         <div className="modal-overlay">
           <div className="modal-content">
