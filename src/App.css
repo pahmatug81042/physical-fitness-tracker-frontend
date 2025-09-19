@@ -1,92 +1,115 @@
-/* Global styles for responsive design */
-
-/* Reset some defaults */
+/* ========= RESET & BASE ========== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Light theme (default) */
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ========= THEME VARIABLES ========== */
+
+/* Light Theme (default) */
 body.light {
   --bg-color: #f9f9f9;
-  --text-color: #333;
-  --card-bg: #fff;
+  --text-color: #1c1c1c;
+  --card-bg: #ffffff;
   --navbar-bg: #007bff;
-  --navbar-text: white;
+  --navbar-text: #ffffff;
   --btn-primary-bg: #007bff;
   --btn-primary-hover: #0056b3;
   --input-border: #ccc;
+  --link-color: #007bff;
+  --scrollbar-thumb: #cccccc;
 }
 
-/* Dark theme */
+/* Dark Theme */
 body.dark {
   --bg-color: #121212;
-  --text-color: #eee;
+  --text-color: #eaeaea;
   --card-bg: #1e1e1e;
   --navbar-bg: #222;
   --navbar-text: #eee;
   --btn-primary-bg: #1f6feb;
   --btn-primary-hover: #1158c7;
   --input-border: #444;
+  --link-color: #58a6ff;
+  --scrollbar-thumb: #444;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  line-height: 1.6;
-}
+/* ========= UTILITIES ========== */
 
-/* Layout wrapper */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-main {
-  flex: 1;
-  padding: 1rem;
-}
-
-/* Utility classes */
 .text-center {
   text-align: center;
 }
 
+/* ========= BUTTONS ========== */
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   border: none;
-  cursor: pointer;
   font-weight: 600;
+  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
 
 .btn-primary {
   background-color: var(--btn-primary-bg);
-  color: white;
+  color: #fff;
 }
 
 .btn-primary:hover {
   background-color: var(--btn-primary-hover);
 }
 
-.card {
-  background-color: var(--card-bg);
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, background-color 0.3s ease;
+/* ========= NAVBAR ========== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+  padding: 0.75rem 1rem;
 }
 
-.card:hover {
-  transform: translateY(-2px);
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-/* Responsive grid for exercise/workout lists */
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links a {
+  color: var(--navbar-text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+/* ========= GRID SYSTEM ========== */
 .grid {
   display: grid;
   gap: 1rem;
@@ -110,70 +133,47 @@ main {
   }
 }
 
-/* Navbar responsive styling */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--navbar-bg);
-  color: var(--navbar-text);
-  padding: 0.75rem 1rem;
-  flex-wrap: wrap;
+/* ========= CARD ========== */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.navbar-brand {
-  font-size: 1.25rem;
-  font-weight: bold;
+.card:hover {
+  transform: translateY(-2px);
 }
 
-.nav-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.nav-links a {
-  color: var(--navbar-text);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.nav-links a:hover {
-  text-decoration: underline;
-}
-
-/* Stack new links vertically on small screens */
-@media (max-width: 600px) {
-  .nav-links {
-    flex-direction: column;
-    width: 100%;
-    margin-top: 0.5rem;
-  }
-}
-
-/* Forms */
+/* ========= FORM ========== */
 form {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   max-width: 400px;
-  margin: auto;
+  margin: 2rem auto;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   padding: 0.75rem;
+  font-size: 1rem;
   border-radius: 6px;
   border: 1px solid var(--input-border);
-  font-size: 1rem;
   background-color: var(--card-bg);
   color: var(--text-color);
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   outline: none;
   border-color: var(--btn-primary-bg);
 }
 
-/* Modal overlay */
+/* ========= MODAL ========== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -187,7 +187,6 @@ input:focus, select:focus, textarea:focus {
   z-index: 999;
 }
 
-/* Modal content */
 .modal-content {
   background-color: var(--card-bg);
   padding: 1.5rem;
@@ -195,4 +194,56 @@ input:focus, select:focus, textarea:focus {
   width: 90%;
   max-width: 500px;
   color: var(--text-color);
+}
+
+/* ========= LOADER ========== */
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+}
+
+/* ========= LINKS ========== */
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ========= IMAGES ========== */
+img {
+  max-width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+
+/* ========= SCROLLBAR ========== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ========= PAGE CONTAINER ========== */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  padding: 1rem;
 }

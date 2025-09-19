@@ -1,44 +1,35 @@
 import React from "react";
 
-export default function ExerciseVideos({ exerciseVideos = [], name }) {
-    if (!exerciseVideos.length) return <div>No videos found.</div>
+const ExerciseVideos = ({ exerciseVideos, name }) => {
 
-    return (
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            {exerciseVideos.slice(0, 6).map((item, i) => {
-                const vid = item.videos;
-                const thumb = vid?.thumbnails?.[0]?.url;
-                return (
-                    <a
-                        key={i}
-                        href={`https://www.youtube.com/watch?v=${vid.videoId}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={
-                            {
-                                width: 300,
-                                textDecoration: "none",
-                                color: "inherit",
-                            }
-                        }
-                    >
-                        <img 
-                            src={thumb}
-                            alt={vid.title}
-                            style={
-                                {
-                                    width: "100%",
-                                    height: 170,
-                                    objectFit: "cover",
-                                    borderRadius: 6,
-                                }
-                            }
-                        />
-                        <div style={{ fontWeight: 600, marginTop: 6 }}>{vid.title}</div>
-                        <div style={{ fontSize: 12, color: "#666" }}>{vid.channelName}</div>
-                    </a>
-                );
-            })}
-        </div>
-    );
+  return (
+    <div className="videos-section">
+      <h3 className="videos-heading">
+        Watch <span>{name}</span> exercise videos
+      </h3>
+      <div className="videos-container">
+        {exerciseVideos.slice(0, 3).map((item, index) => (
+          <a
+            key={index}
+            className="video-card"
+            href={`https://www.youtube.com/watch?v=${item.video.videoId}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img
+              src={item.video.thumbnails[0].url}
+              alt={item.video.title}
+              className="video-thumbnail"
+            />
+            <div>
+              <h4 className="video-title">{item.video.title}</h4>
+              <p className="video-channel">{item.video.channelName}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
 };
+
+export default ExerciseVideos;
