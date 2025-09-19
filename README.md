@@ -38,6 +38,7 @@ Here's the deployed frontend on Netlify: https://profound-sunshine-034413.netlif
 ```.env
 ### Frontend `.env`
 VITE_API_BASE_URL=https://your-backend-url.onrender.com
+VITE_RAPID_API_KEY=your-rapidapi-key
 
 ### Backend `.env`
 MONGO_URI=your-mongodb-connection-string
