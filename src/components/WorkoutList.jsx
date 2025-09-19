@@ -1,6 +1,10 @@
-// WorkoutList.jsx
-import React from "react";
-import { deleteWorkout, deleteExerciseFromWorkout } from "../services/workoutService"; // Assuming you have the deleteExercise API
+// src/components/WorkoutList.jsx
+import React, { useState } from "react";
+import {
+  deleteWorkout,
+  deleteExerciseFromWorkout,
+  updateExerciseInWorkout,
+} from "../services/workoutService"; // Assuming you have the deleteExercise API
 
 export default function WorkoutList({
   workouts,
@@ -8,6 +12,13 @@ export default function WorkoutList({
   onWorkoutEdit,
   onExerciseEdit,
 }) {
+  const [editingExercise, setEditingExercise] = useState(null);
+  const [exerciseFormData, setExerciseFormData] = useState({
+    sets: "",
+    reps: "",
+    duration: "",
+  });
+
   if (!workouts || workouts.length === 0) {
     return (
       <div style={{ padding: 20 }}>
@@ -30,11 +41,48 @@ export default function WorkoutList({
   const handleDeleteExercise = async (workoutId, exerciseId) => {
     if (!window.confirm("Are you sure you want to delete this exercise from the workout?")) return;
     try {
-      await deleteExerciseFromWorkout(workoutId, exerciseId); // Assuming this function exists in your service
+      await deleteExerciseFromWorkout(workoutId, exerciseId);
       onWorkoutDeleted(); // trigger reload to refresh workout list
     } catch (err) {
       console.error("Failed to delete exercise", err);
     }
+  };
+
+  const handleExerciseEdit = (workoutId, exerciseId, exerciseData) => {
+    // Open the form to edit exercise
+    setEditingExercise({ workoutId, exerciseId });
+    setExerciseFormData({
+      sets: exerciseData.sets || "",
+      reps: exerciseData.reps || "",
+      duration: exerciseData.duration || "",
+    });
+  };
+
+  const handleExerciseFormSubmit = async (e) => {
+    e.preventDefault();
+    const { workoutId, exerciseId } = editingExercise;
+    const updatedData = {
+      sets: exerciseFormData.sets,
+      reps: exerciseFormData.reps,
+      duration: exerciseFormData.duration,
+    };
+
+    try {
+      await updateExerciseInWorkout(workoutId, exerciseId, updatedData);
+      setEditingExercise(null);
+      setExerciseFormData({ sets: "", reps: "", duration: "" });
+      onWorkoutDeleted(); // Refresh the list after update
+    } catch (err) {
+      console.error("Failed to update exercise", err);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setExerciseFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -68,7 +116,7 @@ export default function WorkoutList({
                   <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
                     <button
                       className="btn"
-                      onClick={() => onExerciseEdit(workout._id, ex.exercise._id)}
+                      onClick={() => handleExerciseEdit(workout._id, ex.exercise._id, ex)}
                     >
                       ✏️ Edit Exercise
                     </button>
@@ -92,12 +140,71 @@ export default function WorkoutList({
             <button className="btn" onClick={() => onWorkoutEdit(workout)}>
               ✏️ Edit Workout
             </button>
-            <button className="btn" onClick={() => handleDeleteWorkout(workout._id)}>
+            <button
+              className="btn"
+              onClick={() => handleDeleteWorkout(workout._id)}
+            >
               ❌ Delete Workout
             </button>
           </div>
         </div>
       ))}
+
+      {/* Exercise Edit Form (Modal or inline form) */}
+      {editingExercise && (
+        <div style={{ padding: 20, border: "1px solid #ccc", marginTop: 20 }}>
+          <h3>Edit Exercise</h3>
+          <form onSubmit={handleExerciseFormSubmit}>
+            <div>
+              <label htmlFor="sets">Sets:</label>
+              <input
+                type="number"
+                id="sets"
+                name="sets"
+                value={exerciseFormData.sets}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="reps">Reps:</label>
+              <input
+                type="number"
+                id="reps"
+                name="reps"
+                value={exerciseFormData.reps}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="duration">Duration (min):</label>
+              <input
+                type="number"
+                id="duration"
+                name="duration"
+                value={exerciseFormData.duration}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div style={{ marginTop: 10 }}>
+              <button type="submit" className="btn">
+                Save Changes
+              </button>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => setEditingExercise(null)} // Cancel editing
+                style={{ marginLeft: 10 }}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
