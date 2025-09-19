@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { exerciseOptions, fetchData, youtubeOptions } from '../utils/apiClient';
+import { exerciseOptions, apiClient, youtubeOptions } from '../utils/apiClient';
 import Detail from '../components/Detail';
 import ExerciseVideos from '../components/ExerciseVideos';
 import SimilarExercises from '../components/SimilarExercises';
@@ -25,25 +25,25 @@ export default function ExerciseDetail() {
       const youtubeSearchUrl = 'https://youtube-search-and-download.p.rapidapi.com';
 
       try {
-        const exerciseDetailData = await fetchData(
+        const exerciseDetailData = await apiClient(
           `${exerciseDbUrl}/exercises/exercise/${id}`,
           exerciseOptions
         );
         setExerciseDetail(exerciseDetailData);
 
-        const exerciseVideosData = await fetchData(
+        const exerciseVideosData = await apiClient(
           `${youtubeSearchUrl}/search?query=${exerciseDetailData.name} exercise`,
           youtubeOptions
         );
         setExerciseVideos(exerciseVideosData.contents);
 
-        const targetMuscleExercisesData = await fetchData(
+        const targetMuscleExercisesData = await apiClient(
           `${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`,
           exerciseOptions
         );
         setTargetMuscleExercises(targetMuscleExercisesData);
 
-        const equipmentExercisesData = await fetchData(
+        const equipmentExercisesData = await apiClient(
           `${exerciseDbUrl}/exercises/equipment/${exerciseDetailData.equipment}`,
           exerciseOptions
         );

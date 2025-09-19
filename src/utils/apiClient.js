@@ -1,35 +1,22 @@
 // src/utils/apiClient.js
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
-// Helper to get auth token
 const getToken = () => localStorage.getItem("token");
 
-/**
- * Generic API client for both internal API and third-party APIs (e.g., RapidAPI).
- * Supports Authorization token and dynamic headers.
- * 
- * @param {string} endpoint - API endpoint or full URL for external APIs.
- * @param {object} options - Fetch options including headers, method, body, etc.
- * @param {boolean} isExternal - Whether to bypass the base URL (for RapidAPI).
- * @returns {Promise<object|null>}
- */
-const apiClient = async (endpoint, options = {}, isExternal = false) => {
+export const apiClient = async (endpoint, options = {}) => {
   const token = getToken();
-
-  const defaultHeaders = {
+  const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {}),
-    ...(token && !isExternal ? { Authorization: `Bearer ${token}` } : {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const url = isExternal ? endpoint : `${API_BASE_URL.replace(/\/$/, "")}${endpoint}`;
-
-  const res = await fetch(url, {
-    ...options,
-    headers: defaultHeaders,
+  const res = await fetch(endpoint.startsWith("http") ? endpoint : `${API_BASE_URL.replace(/\/$/, "")}${endpoint}`, {
+    headers,
+    method: options.method || "GET",
+    body: options.body ? JSON.stringify(options.body) : undefined,
   });
-
-  const contentType = res.headers.get("Content-Type");
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
@@ -40,12 +27,22 @@ const apiClient = async (endpoint, options = {}, isExternal = false) => {
   }
 
   if (res.status === 204) return null;
-
-  if (contentType && contentType.includes("application/json")) {
-    return res.json().catch(() => null);
-  }
-
-  return null;
+  return res.json().catch(() => null);
 };
 
-export default apiClient;
+// --- RapidAPI headers ---
+export const exerciseOptions = {
+  method: "GET",
+  headers: {
+    "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
+    "X-RapidAPI-Key": import.meta.env.VITE_RAPID_API_KEY,
+  },
+};
+
+export const youtubeOptions = {
+  method: "GET",
+  headers: {
+    "X-RapidAPI-Host": "youtube-search-and-download.p.rapidapi.com",
+    "X-RapidAPI-Key": import.meta.env.VITE_RAPID_API_KEY,
+  },
+};
