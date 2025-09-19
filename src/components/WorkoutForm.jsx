@@ -30,44 +30,32 @@ export default function WorkoutForm({ setWorkoutCreated }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        marginTop: 20,
-        backgroundColor: "white",
-        padding: 20,
-        borderRadius: 8,
-        minWidth: 300,
-        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
-      }}
-    >
+    <form onSubmit={handleSubmit} className="card" style={{ maxWidth: 400, margin: "20px auto" }}>
       <h3>Create Workout</h3>
-      <div style={{ marginBottom: 10 }}>
-        <label>Workout Name: </label>
+      <div>
+        <label>Workout Name:</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Chest Day"
           required
-          style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
           disabled={loading}
         />
       </div>
-      <div style={{ marginBottom: 10 }}>
-        <label>Date: </label>
+      <div>
+        <label>Date:</label>
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
           disabled={loading}
         />
       </div>
-      <button type="submit" disabled={loading} style={{ marginRight: 8 }}>
+      <button type="submit" disabled={loading} className="btn btn-primary" style={{ marginTop: 12 }}>
         {loading ? "Creating..." : "Create Workout"}
       </button>
-      {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
+      {error && <p style={{ color: "var(--btn-primary-bg)", marginTop: 10 }}>{error}</p>}
     </form>
   );
 }

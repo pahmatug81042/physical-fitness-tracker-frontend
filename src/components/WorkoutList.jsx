@@ -14,16 +14,7 @@ export default function WorkoutList({ workouts }) {
     <div style={{ padding: 20 }}>
       <h2>Your Workouts</h2>
       {workouts.map((workout) => (
-        <div
-          key={workout._id}
-          style={{
-            border: "1px solid #ddd",
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 12,
-            backgroundColor: "#f9f9f9",
-          }}
-        >
+        <div key={workout._id} className="card" style={{ marginBottom: 16 }}>
           <h3>{workout.title}</h3>
           <p>
             Date:{" "}
@@ -38,8 +29,9 @@ export default function WorkoutList({ workouts }) {
                   key={idx}
                   style={{
                     padding: 6,
-                    borderBottom: "1px solid #eee",
+                    borderBottom: "1px solid var(--input-border)",
                     fontSize: 14,
+                    color: "var(--text-color)",
                   }}
                 >
                   <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets:{" "}
