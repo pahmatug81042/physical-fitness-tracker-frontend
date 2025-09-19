@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect } from "react";
+// src/pages/Dashboard.jsx
+import React, { useState, useEffect, useCallback } from "react";
 import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
 import AddToWorkoutModal from "../components/AddToWorkoutModal";
@@ -13,17 +14,16 @@ export default function Dashboard() {
   const handleAddClick = (exercise) => setSelectedExercise(exercise);
   const clearSelectedExercise = () => setSelectedExercise(null);
 
-  // ✅ Load workouts from backend
   const loadWorkouts = useCallback(async () => {
     try {
       const data = await getWorkouts();
       setWorkouts(data);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load workouts:", err);
     }
   }, []);
 
-  // Load workouts initially
+  // Initial load
   useEffect(() => {
     loadWorkouts();
   }, [loadWorkouts]);
@@ -67,7 +67,7 @@ export default function Dashboard() {
             <AddToWorkoutModal
               exerciseId={selectedExercise.id || selectedExercise._id}
               onClose={clearSelectedExercise}
-              onAdded={loadWorkouts} // Directly call loadWorkouts
+              onAdded={loadWorkouts} // Reload workouts after adding exercise
             />
           </>
         ) : (
@@ -78,7 +78,7 @@ export default function Dashboard() {
       {showWorkoutForm && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <WorkoutForm onWorkoutCreated={loadWorkouts} /> {/* Directly call loadWorkouts */}
+            <WorkoutForm onWorkoutCreated={loadWorkouts} /> {/* Reload workouts after creation */}
             <button
               className="btn"
               style={{ marginTop: 12 }}

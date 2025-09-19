@@ -1,3 +1,4 @@
+// src/components/WorkoutForm.jsx
 import React, { useState } from "react";
 import { createWorkout } from "../services/workoutService";
 
@@ -10,7 +11,7 @@ export default function WorkoutForm({ onWorkoutCreated }) {
     try {
       const payload = { title, date };
       await createWorkout(payload);
-      onWorkoutCreated?.(); // Directly refresh workouts in Dashboard
+      onWorkoutCreated(); // Reload workouts
       setTitle("");
       setDate("");
     } catch (error) {
