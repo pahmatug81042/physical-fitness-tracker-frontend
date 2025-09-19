@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { exerciseOptions, apiClient, youtubeOptions } from '../utils/apiClient';
-import Detail from '../components/Detail';
-import ExerciseVideos from '../components/ExerciseVideos';
-import SimilarExercises from '../components/SimilarExercises';
-import AddToWorkoutModal from '../components/AddToWorkoutModal';
+import { exerciseOptions, apiClient, youtubeOptions } from "../utils/apiClient";
+import Detail from "../components/Detail";
+import ExerciseVideos from "../components/ExerciseVideos";
+import SimilarExercises from "../components/SimilarExercises";
+import AddToWorkoutModal from "../components/AddToWorkoutModal";
 
 export default function ExerciseDetail() {
   const [exerciseDetail, setExerciseDetail] = useState({});
@@ -13,16 +13,16 @@ export default function ExerciseDetail() {
   const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
   const [equipmentExercises, setEquipmentExercises] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [confirmation, setConfirmation] = useState('');
-  const { id } = useParams();
+  const [confirmation, setConfirmation] = useState("");
+  const { id } = useParams(); // ✅ Gets ID from "/exercises/:id"
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     const fetchExercisesData = async () => {
-      const exerciseDbUrl = 'https://exercisedb.p.rapidapi.com';
-      const youtubeSearchUrl = 'https://youtube-search-and-download.p.rapidapi.com';
+      const exerciseDbUrl = "https://exercisedb.p.rapidapi.com";
+      const youtubeSearchUrl = "https://youtube-search-and-download.p.rapidapi.com";
 
       try {
         const exerciseDetailData = await apiClient(
@@ -49,7 +49,7 @@ export default function ExerciseDetail() {
         );
         setEquipmentExercises(equipmentExercisesData);
       } catch (error) {
-        console.error('Error fetching exercise details:', error);
+        console.error("Error fetching exercise details:", error);
       }
     };
 
@@ -59,23 +59,23 @@ export default function ExerciseDetail() {
   if (!exerciseDetail || !exerciseDetail.name) return <div>Loading...</div>;
 
   const handleAdded = () => {
-    setConfirmation('Exercise added to your workout!');
+    setConfirmation("Exercise added to your workout!");
     setModalOpen(false);
 
     setTimeout(() => {
-      // Navigate to same detail page to "refresh"
+      // Reload current page with same ID
       navigate(`/exercises/${id}`, { replace: true });
-      setConfirmation('');
+      setConfirmation("");
     }, 1500);
   };
 
   return (
-    <div className="exercise-detail-container" style={{ marginTop: 96, padding: '0 16px' }}>
+    <div className="exercise-detail-container" style={{ marginTop: 96, padding: "0 16px" }}>
       <Detail exerciseDetail={exerciseDetail} />
 
       <button
         className="btn-primary"
-        style={{ margin: '24px 0', padding: '12px 20px', fontSize: 16, cursor: 'pointer' }}
+        style={{ margin: "24px 0", padding: "12px 20px", fontSize: 16, cursor: "pointer" }}
         onClick={() => setModalOpen(true)}
       >
         Add to Workout
@@ -86,11 +86,11 @@ export default function ExerciseDetail() {
           className="confirmation-message"
           style={{
             marginBottom: 24,
-            padding: '12px 16px',
-            backgroundColor: '#d4edda',
-            color: '#155724',
+            padding: "12px 16px",
+            backgroundColor: "#d4edda",
+            color: "#155724",
             borderRadius: 6,
-            fontWeight: 'bold',
+            fontWeight: "bold",
           }}
         >
           {confirmation}

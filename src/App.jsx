@@ -29,12 +29,20 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Exercises */}
+        {/* Exercise routes */}
         <Route path="/exercises" element={<ExerciseList />} />
         <Route path="/exercises/:id" element={<ExerciseDetail />} />
 
+        {/* 🔁 Optional: Redirect /exercise/:id ➜ /exercises/:id */}
+        <Route
+          path="/exercise/:id"
+          element={({ params }) => (
+            <Navigate to={`/exercises/${params.id}`} replace />
+          )}
+        />
+
         {/* Private routes */}
-        <Route 
+        <Route
           path="/dashboard"
           element={
             <PrivateRoute>
@@ -42,7 +50,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route 
+        <Route
           path="/workouts"
           element={
             <PrivateRoute>
@@ -50,7 +58,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route 
+        <Route
           path="/workouts/new"
           element={
             <PrivateRoute>
@@ -61,6 +69,6 @@ function App() {
       </Routes>
     </>
   );
-};
+}
 
 export default App;
