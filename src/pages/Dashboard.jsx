@@ -7,7 +7,6 @@ import { getWorkouts } from "../services/workoutService";
 
 export default function Dashboard() {
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [showWorkoutForm, setShowWorkoutForm] = useState(false);
   const [workouts, setWorkouts] = useState([]);
 
   const handleAddClick = (exercise) => setSelectedExercise(exercise);
@@ -40,13 +39,9 @@ export default function Dashboard() {
         <div style={{ flex: 1 }}>
           <h2>Your Workouts</h2>
           <WorkoutList workouts={workouts} />
-          <button
-            className="btn btn-primary"
-            style={{ marginTop: 16 }}
-            onClick={() => setShowWorkoutForm(true)}
-          >
-            Add Workout
-          </button>
+
+          {/* Inline workout creation form */}
+          <WorkoutForm onWorkoutCreated={loadWorkouts} />
         </div>
       </div>
 
@@ -56,14 +51,6 @@ export default function Dashboard() {
           exerciseId={selectedExercise.id || selectedExercise._id}
           onClose={clearSelectedExercise}
           onAdded={loadWorkouts} // Reload workouts on add
-        />
-      )}
-
-      {/* Workout Creation Modal */}
-      {showWorkoutForm && (
-        <WorkoutForm
-          onWorkoutCreated={loadWorkouts} // Reload workouts after creation
-          onClose={() => setShowWorkoutForm(false)}
         />
       )}
     </div>
