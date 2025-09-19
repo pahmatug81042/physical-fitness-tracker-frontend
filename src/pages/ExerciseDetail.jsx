@@ -1,51 +1,116 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { fetchExerciseById } from "../services/exerciseService";
-import { fetchVideosForExercise } from "../services/videoService";
-import ExerciseVideos from "../components/ExerciseVideos";
-// import AddToWorkoutModal from "../components/AddToWorkoutModal";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+
+import { exerciseOptions, fetchData, youtubeOptions } from '../utils/fetchData';
+import Detail from '../components/Detail';
+import ExerciseVideos from '../components/ExerciseVideos';
+import SimilarExercises from '../components/SimilarExercises';
+import AddToWorkoutModal from '../components/AddToWorkoutModal';
 
 export default function ExerciseDetail() {
-    const { id } = useParams();
-    const [exercise, setExercise] = useState(null);
-    const [videos, setVideos] = useState([]);
-    // const [modalOpen, setModalOpen] = useState(false);
+  const [exerciseDetail, setExerciseDetail] = useState({});
+  const [exerciseVideos, setExerciseVideos] = useState([]);
+  const [targetMuscleExercises, setTargetMuscleExercises] = useState([]);
+  const [equipmentExercises, setEquipmentExercises] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [confirmation, setConfirmation] = useState('');
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const load = async () => {
-            try {
-                const ex = await fetchExerciseById(id);
-                setExercise(ex);
-                const vids = await fetchVideosForExercise(ex.name);
-                setVideos(vids);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        load();
-    }, [id]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    if (!exercise) return <div>Loading...</div>;
+    const fetchExercisesData = async () => {
+      const exerciseDbUrl = 'https://exercisedb.p.rapidapi.com';
+      const youtubeSearchUrl = 'https://youtube-search-and-download.p.rapidapi.com';
 
-    const mainImg = 
-        videos?.[0]?.videos?.thumbnails?.[0]?.url || 
-        exercise.gifUrl || 
-        `https://via.placeholder.com/640x360?text=${encodeURIComponent(exercise.name)}`;
+      try {
+        const exerciseDetailData = await fetchData(
+          `${exerciseDbUrl}/exercises/exercise/${id}`,
+          exerciseOptions
+        );
+        setExerciseDetail(exerciseDetailData);
 
-    return (
-        <div style={{ padding: 20 }}>
-            <h2 style={{ textTransform: "capitalize" }}>{exercise.name}</h2>
-            <img 
-                src={mainImg}
-                alt={exercise.name}
-                style={{ width: "100%", maxWidth: 760, borderRadius: 8 }}
-            />
-            <p>{exercise.description}</p>
-            <div style={{ margin: "12px 0", color: "#007bff", fontWeight: "bold" }}>
-                To add this exercise to a workout, go to the Dashboard and use the dedicated Add to Workout section.
-            </div>
-            <h3>Tutorial Videos</h3>
-            <ExerciseVideos exerciseVideos={videos} name={exercise.name} />
+        const exerciseVideosData = await fetchData(
+          `${youtubeSearchUrl}/search?query=${exerciseDetailData.name} exercise`,
+          youtubeOptions
+        );
+        setExerciseVideos(exerciseVideosData.contents);
+
+        const targetMuscleExercisesData = await fetchData(
+          `${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`,
+          exerciseOptions
+        );
+        setTargetMuscleExercises(targetMuscleExercisesData);
+
+        const equipmentExercisesData = await fetchData(
+          `${exerciseDbUrl}/exercises/equipment/${exerciseDetailData.equipment}`,
+          exerciseOptions
+        );
+        setEquipmentExercises(equipmentExercisesData);
+      } catch (error) {
+        console.error('Error fetching exercise details:', error);
+      }
+    };
+
+    fetchExercisesData();
+  }, [id]);
+
+  if (!exerciseDetail || !exerciseDetail.name) return <div>Loading...</div>;
+
+  const handleAdded = () => {
+    setConfirmation('Exercise added to your workout!');
+    setModalOpen(false);
+
+    setTimeout(() => {
+      // Navigate to same detail page to "refresh"
+      navigate(`/exercises/${id}`, { replace: true });
+      setConfirmation('');
+    }, 1500);
+  };
+
+  return (
+    <div className="exercise-detail-container" style={{ marginTop: 96, padding: '0 16px' }}>
+      <Detail exerciseDetail={exerciseDetail} />
+
+      <button
+        className="btn-primary"
+        style={{ margin: '24px 0', padding: '12px 20px', fontSize: 16, cursor: 'pointer' }}
+        onClick={() => setModalOpen(true)}
+      >
+        Add to Workout
+      </button>
+
+      {confirmation && (
+        <div
+          className="confirmation-message"
+          style={{
+            marginBottom: 24,
+            padding: '12px 16px',
+            backgroundColor: '#d4edda',
+            color: '#155724',
+            borderRadius: 6,
+            fontWeight: 'bold',
+          }}
+        >
+          {confirmation}
         </div>
-    );
-};
+      )}
+
+      {modalOpen && (
+        <AddToWorkoutModal
+          exercise={exerciseDetail}
+          onClose={() => setModalOpen(false)}
+          onAdded={handleAdded}
+        />
+      )}
+
+      <ExerciseVideos exerciseVideos={exerciseVideos} name={exerciseDetail.name} />
+
+      <SimilarExercises
+        targetMuscleExercises={targetMuscleExercises}
+        equipmentExercises={equipmentExercises}
+      />
+    </div>
+  );
+}
