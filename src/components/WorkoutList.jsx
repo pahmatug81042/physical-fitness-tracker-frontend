@@ -1,13 +1,13 @@
 // WorkoutList.jsx
 import React from "react";
-import { deleteWorkout } from "../services/workoutService";
+import { deleteWorkout, deleteExerciseFromWorkout } from "../services/workoutService"; // Assuming you have the deleteExercise API
 
 export default function WorkoutList({
   workouts,
   onWorkoutDeleted,
   onWorkoutEdit,
+  onExerciseEdit,
 }) {
-  // Check if no workouts are available
   if (!workouts || workouts.length === 0) {
     return (
       <div style={{ padding: 20 }}>
@@ -17,15 +17,23 @@ export default function WorkoutList({
     );
   }
 
-  // Handle workout deletion
-  const handleDelete = async (id) => {
+  const handleDeleteWorkout = async (id) => {
     if (!window.confirm("Are you sure you want to delete this workout?")) return;
     try {
       await deleteWorkout(id);
-      onWorkoutDeleted(); // Trigger reload of workouts
+      onWorkoutDeleted(); // trigger reload
     } catch (err) {
       console.error("Failed to delete workout", err);
-      alert("There was an issue deleting this workout. Please try again later.");
+    }
+  };
+
+  const handleDeleteExercise = async (workoutId, exerciseId) => {
+    if (!window.confirm("Are you sure you want to delete this exercise from the workout?")) return;
+    try {
+      await deleteExerciseFromWorkout(workoutId, exerciseId); // Assuming this function exists in your service
+      onWorkoutDeleted(); // trigger reload to refresh workout list
+    } catch (err) {
+      console.error("Failed to delete exercise", err);
     }
   };
 
@@ -56,6 +64,21 @@ export default function WorkoutList({
                   <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets:{" "}
                   {ex.sets ?? 0} | Reps: {ex.reps ?? 0} | Duration:{" "}
                   {ex.duration ?? 0} min
+
+                  <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                    <button
+                      className="btn"
+                      onClick={() => onExerciseEdit(workout._id, ex.exercise._id)}
+                    >
+                      ✏️ Edit Exercise
+                    </button>
+                    <button
+                      className="btn"
+                      onClick={() => handleDeleteExercise(workout._id, ex.exercise._id)}
+                    >
+                      ❌ Delete Exercise
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
@@ -66,19 +89,11 @@ export default function WorkoutList({
           </div>
 
           <div style={{ display: "flex", gap: 8 }}>
-            <button
-              className="btn"
-              onClick={() => onWorkoutEdit(workout)}
-              style={{ padding: "6px 12px" }}
-            >
-              ✏️ Edit
+            <button className="btn" onClick={() => onWorkoutEdit(workout)}>
+              ✏️ Edit Workout
             </button>
-            <button
-              className="btn"
-              onClick={() => handleDelete(workout._id)}
-              style={{ padding: "6px 12px", backgroundColor: "#f44336" }}
-            >
-              ❌ Delete
+            <button className="btn" onClick={() => handleDeleteWorkout(workout._id)}>
+              ❌ Delete Workout
             </button>
           </div>
         </div>
