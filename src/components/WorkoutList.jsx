@@ -7,6 +7,7 @@ export default function WorkoutList({
   onWorkoutDeleted,
   onWorkoutEdit,
 }) {
+  // Check if no workouts are available
   if (!workouts || workouts.length === 0) {
     return (
       <div style={{ padding: 20 }}>
@@ -16,13 +17,15 @@ export default function WorkoutList({
     );
   }
 
+  // Handle workout deletion
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this workout?")) return;
     try {
       await deleteWorkout(id);
-      onWorkoutDeleted(); // trigger reload
+      onWorkoutDeleted(); // Trigger reload of workouts
     } catch (err) {
       console.error("Failed to delete workout", err);
+      alert("There was an issue deleting this workout. Please try again later.");
     }
   };
 
@@ -51,8 +54,8 @@ export default function WorkoutList({
                   }}
                 >
                   <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets:{" "}
-                  {ex.sets ?? 0} | Reps: {ex.reps ?? 0} | Duration: {ex.duration ?? 0}{" "}
-                  min
+                  {ex.sets ?? 0} | Reps: {ex.reps ?? 0} | Duration:{" "}
+                  {ex.duration ?? 0} min
                 </div>
               ))
             ) : (
@@ -63,10 +66,18 @@ export default function WorkoutList({
           </div>
 
           <div style={{ display: "flex", gap: 8 }}>
-            <button className="btn" onClick={() => onWorkoutEdit(workout)}>
+            <button
+              className="btn"
+              onClick={() => onWorkoutEdit(workout)}
+              style={{ padding: "6px 12px" }}
+            >
               ✏️ Edit
             </button>
-            <button className="btn" onClick={() => handleDelete(workout._id)}>
+            <button
+              className="btn"
+              onClick={() => handleDelete(workout._id)}
+              style={{ padding: "6px 12px", backgroundColor: "#f44336" }}
+            >
               ❌ Delete
             </button>
           </div>

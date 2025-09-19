@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import ExerciseList from "./components/ExerciseList";
 import WorkoutList from "./components/WorkoutList";
 import WorkoutForm from "./components/WorkoutForm";
+import WorkoutDetails from "./pages/WorkoutDetails";
 import { AuthContext } from "./context/AuthContext";
 import "./App.css";
 
@@ -33,12 +34,10 @@ function App() {
         <Route path="/exercises" element={<ExerciseList />} />
         <Route path="/exercises/:id" element={<ExerciseDetail />} />
 
-        {/* 🔁 Optional: Redirect /exercise/:id ➜ /exercises/:id */}
+        {/* Optional: Redirect /exercise/:id ➜ /exercises/:id */}
         <Route
           path="/exercise/:id"
-          element={({ params }) => (
-            <Navigate to={`/exercises/${params.id}`} replace />
-          )}
+          element={({ params }) => <Navigate to={`/exercises/${params.id}`} replace />}
         />
 
         {/* Private routes */}
@@ -63,6 +62,15 @@ function App() {
           element={
             <PrivateRoute>
               <WorkoutForm />
+            </PrivateRoute>
+          }
+        />
+        {/* NEW: Workout details page */}
+        <Route
+          path="/workouts/:id"
+          element={
+            <PrivateRoute>
+              <WorkoutDetails />
             </PrivateRoute>
           }
         />
