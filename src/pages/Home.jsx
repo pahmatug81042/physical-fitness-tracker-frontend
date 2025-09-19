@@ -17,6 +17,7 @@ const Home = () => {
           <li>View detailed instructions and GIFs for exercises</li>
           <li>Watch YouTube exercise videos directly from the app</li>
           <li>Create, update, and delete your workouts</li>
+          <li>Update and delete exercises in your workouts</li>
           <li>Secure user authentication with JWT</li>
           <li>Responsive light/dark theme toggle</li>
         </ul>
