@@ -1,3 +1,4 @@
+// Dashboard.jsx
 import React, { useState, useCallback, useEffect } from "react";
 import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
@@ -7,13 +8,13 @@ import { getWorkouts } from "../services/workoutService";
 
 export default function Dashboard() {
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [editingWorkout, setEditingWorkout] = useState(null);
   const [workouts, setWorkouts] = useState([]);
   const [workoutCreated, setWorkoutCreated] = useState(false);
 
   const handleAddClick = (exercise) => setSelectedExercise(exercise);
   const clearSelectedExercise = () => setSelectedExercise(null);
 
-  // Load workouts from backend
   const loadWorkouts = useCallback(async () => {
     try {
       const data = await getWorkouts();
@@ -23,12 +24,10 @@ export default function Dashboard() {
     }
   }, []);
 
-  // Initial load
   useEffect(() => {
     loadWorkouts();
   }, [loadWorkouts]);
 
-  // Reload workouts when workoutCreated changes to true
   useEffect(() => {
     if (workoutCreated) {
       loadWorkouts();
@@ -46,11 +45,17 @@ export default function Dashboard() {
         </div>
 
         <div style={{ flex: 1 }}>
-          <h2>Your Workouts</h2>
-          <WorkoutList workouts={workouts} />
+          <WorkoutList
+            workouts={workouts}
+            onWorkoutDeleted={loadWorkouts}
+            onWorkoutEdit={setEditingWorkout}
+          />
 
-          {/* Pass setWorkoutCreated to WorkoutForm */}
-          <WorkoutForm setWorkoutCreated={setWorkoutCreated} />
+          <WorkoutForm
+            setWorkoutCreated={setWorkoutCreated}
+            editingWorkout={editingWorkout}
+            setEditingWorkout={setEditingWorkout}
+          />
         </div>
       </div>
 

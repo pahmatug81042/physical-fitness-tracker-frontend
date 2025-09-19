@@ -1,6 +1,12 @@
+// WorkoutList.jsx
 import React from "react";
+import { deleteWorkout } from "../services/workoutService";
 
-export default function WorkoutList({ workouts }) {
+export default function WorkoutList({
+  workouts,
+  onWorkoutDeleted,
+  onWorkoutEdit,
+}) {
   if (!workouts || workouts.length === 0) {
     return (
       <div style={{ padding: 20 }}>
@@ -9,6 +15,16 @@ export default function WorkoutList({ workouts }) {
       </div>
     );
   }
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this workout?")) return;
+    try {
+      await deleteWorkout(id);
+      onWorkoutDeleted(); // trigger reload
+    } catch (err) {
+      console.error("Failed to delete workout", err);
+    }
+  };
 
   return (
     <div style={{ padding: 20 }}>
@@ -22,7 +38,8 @@ export default function WorkoutList({ workouts }) {
               ? new Date(workout.date).toLocaleDateString()
               : "No date set"}
           </p>
-          <div>
+
+          <div style={{ marginBottom: 10 }}>
             {workout.exercise && workout.exercise.length > 0 ? (
               workout.exercise.map((ex, idx) => (
                 <div
@@ -31,7 +48,6 @@ export default function WorkoutList({ workouts }) {
                     padding: 6,
                     borderBottom: "1px solid var(--input-border)",
                     fontSize: 14,
-                    color: "var(--text-color)",
                   }}
                 >
                   <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets:{" "}
@@ -44,6 +60,15 @@ export default function WorkoutList({ workouts }) {
                 No exercises added yet.
               </p>
             )}
+          </div>
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="btn" onClick={() => onWorkoutEdit(workout)}>
+              ✏️ Edit
+            </button>
+            <button className="btn" onClick={() => handleDelete(workout._id)}>
+              ❌ Delete
+            </button>
           </div>
         </div>
       ))}
