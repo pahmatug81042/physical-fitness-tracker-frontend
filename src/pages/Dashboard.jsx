@@ -1,5 +1,4 @@
-// src/pages/Dashboard.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ExerciseList from "../components/ExerciseList";
 import WorkoutList from "../components/WorkoutList";
 import AddToWorkoutModal from "../components/AddToWorkoutModal";
@@ -14,12 +13,13 @@ export default function Dashboard() {
   const handleAddClick = (exercise) => setSelectedExercise(exercise);
   const clearSelectedExercise = () => setSelectedExercise(null);
 
+  // Load workouts from backend
   const loadWorkouts = useCallback(async () => {
     try {
       const data = await getWorkouts();
       setWorkouts(data);
     } catch (err) {
-      console.error("Failed to load workouts:", err);
+      console.error(err);
     }
   }, []);
 
@@ -50,44 +50,21 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div style={{ marginTop: 32 }}>
-        <h2>Add Exercise to Workout</h2>
-        {selectedExercise ? (
-          <>
-            <div style={{ marginBottom: 12 }}>
-              <strong>Selected Exercise:</strong> {selectedExercise.name}
-              <button
-                className="btn"
-                style={{ marginLeft: 12 }}
-                onClick={clearSelectedExercise}
-              >
-                Clear
-              </button>
-            </div>
-            <AddToWorkoutModal
-              exerciseId={selectedExercise.id || selectedExercise._id}
-              onClose={clearSelectedExercise}
-              onAdded={loadWorkouts} // Reload workouts after adding exercise
-            />
-          </>
-        ) : (
-          <p>Select an exercise from the left to add it to a workout.</p>
-        )}
-      </div>
+      {/* Add Exercise Modal */}
+      {selectedExercise && (
+        <AddToWorkoutModal
+          exerciseId={selectedExercise.id || selectedExercise._id}
+          onClose={clearSelectedExercise}
+          onAdded={loadWorkouts} // Reload workouts on add
+        />
+      )}
 
+      {/* Workout Creation Modal */}
       {showWorkoutForm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <WorkoutForm onWorkoutCreated={loadWorkouts} /> {/* Reload workouts after creation */}
-            <button
-              className="btn"
-              style={{ marginTop: 12 }}
-              onClick={() => setShowWorkoutForm(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <WorkoutForm
+          onWorkoutCreated={loadWorkouts} // Reload workouts after creation
+          onClose={() => setShowWorkoutForm(false)}
+        />
       )}
     </div>
   );
