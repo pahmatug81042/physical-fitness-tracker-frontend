@@ -4,6 +4,14 @@ A full stack fitness tracking application built with the MERN stack (MongoDB, Ex
 
 ---
 
+Here's the GitHub Repository for Backend Express, MongoDB, and Node Server to be used with the Frontend Applicaiton: https://github.com/pahmatug81042/physical-fitness-tracker-backend.
+
+---
+
+Here's the deployed frontend on Netlify: https://profound-sunshine-034413.netlify.app/
+
+---
+
 ## 🚀 Features
 
 - **User Authentication** – Secure signup and login with JWT-based authentication  
