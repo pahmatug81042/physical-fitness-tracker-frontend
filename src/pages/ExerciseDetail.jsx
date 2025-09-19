@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { exerciseOptions, fetchData, youtubeOptions } from '../utils/fetchData';
+import { exerciseOptions, fetchData, youtubeOptions } from '../utils/apiClient';
 import Detail from '../components/Detail';
 import ExerciseVideos from '../components/ExerciseVideos';
 import SimilarExercises from '../components/SimilarExercises';
