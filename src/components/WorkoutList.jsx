@@ -1,23 +1,6 @@
-// src/components/WorkoutList.jsx
-import React, { useEffect, useState } from "react";
-import { getWorkouts } from "../services/workoutService";
+import React from "react";
 
-export default function WorkoutList({ refreshKey = 0 }) {
-  const [workouts, setWorkouts] = useState([]);
-
-  const loadWorkouts = async () => {
-    try {
-      const data = await getWorkouts();
-      setWorkouts(data);
-    } catch (error) {
-      console.error("Failed to load workouts:", error);
-    }
-  };
-
-  useEffect(() => {
-    loadWorkouts();
-  }, [refreshKey]);
-
+export default function WorkoutList({ workouts }) {
   if (!workouts || workouts.length === 0) {
     return (
       <div style={{ padding: 20 }}>
@@ -42,16 +25,32 @@ export default function WorkoutList({ refreshKey = 0 }) {
           }}
         >
           <h3>{workout.title}</h3>
-          <p>Date: {workout.date ? new Date(workout.date).toLocaleDateString() : "No date set"}</p>
+          <p>
+            Date:{" "}
+            {workout.date
+              ? new Date(workout.date).toLocaleDateString()
+              : "No date set"}
+          </p>
           <div>
             {workout.exercise && workout.exercise.length > 0 ? (
               workout.exercise.map((ex, idx) => (
-                <div key={idx} style={{ padding: 6, borderBottom: "1px solid #eee", fontSize: 14 }}>
-                  <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets: {ex.sets ?? 0} | Reps: {ex.reps ?? 0} | Duration: {ex.duration ?? 0} min
+                <div
+                  key={idx}
+                  style={{
+                    padding: 6,
+                    borderBottom: "1px solid #eee",
+                    fontSize: 14,
+                  }}
+                >
+                  <strong>{ex.exercise?.name || "Unnamed Exercise"}</strong> | Sets:{" "}
+                  {ex.sets ?? 0} | Reps: {ex.reps ?? 0} | Duration: {ex.duration ?? 0}{" "}
+                  min
                 </div>
               ))
             ) : (
-              <p style={{ fontStyle: "italic", fontSize: 14 }}>No exercises added yet.</p>
+              <p style={{ fontStyle: "italic", fontSize: 14 }}>
+                No exercises added yet.
+              </p>
             )}
           </div>
         </div>

@@ -1,4 +1,3 @@
-// src/components/AddToWorkoutModal.jsx
 import React, { useEffect, useState } from "react";
 import { addExerciseToWorkout, getWorkouts } from "../services/workoutService";
 
@@ -32,7 +31,7 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
         reps,
         duration,
       });
-      onAdded?.(); // Trigger parent refresh
+      onAdded?.(); // Trigger Dashboard refresh
       onClose();
     } catch (error) {
       console.error(error);
