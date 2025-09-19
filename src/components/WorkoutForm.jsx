@@ -1,31 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createWorkout } from "../services/workoutService";
 
-export default function WorkoutForm({ onWorkoutCreated }) {
+export default function WorkoutForm({ setWorkoutCreated }) {
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [date, setDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
     try {
       await createWorkout({ title, date });
-      setSubmitted(true);
+      setWorkoutCreated(true);
+      setTitle("");
+      setDate(() => {
+        const today = new Date();
+        return today.toISOString().split("T")[0];
+      });
     } catch (err) {
       setError(err.message || "Failed to create workout");
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (submitted) {
-      onWorkoutCreated?.();
-      setTitle("");
-      setDate("");
-      setSubmitted(false);
-    }
-  }, [submitted, onWorkoutCreated]);
 
   return (
     <form
@@ -49,6 +51,7 @@ export default function WorkoutForm({ onWorkoutCreated }) {
           placeholder="e.g. Chest Day"
           required
           style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+          disabled={loading}
         />
       </div>
       <div style={{ marginBottom: 10 }}>
@@ -58,10 +61,11 @@ export default function WorkoutForm({ onWorkoutCreated }) {
           value={date}
           onChange={(e) => setDate(e.target.value)}
           style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+          disabled={loading}
         />
       </div>
-      <button type="submit" style={{ marginRight: 8 }}>
-        Create Workout
+      <button type="submit" disabled={loading} style={{ marginRight: 8 }}>
+        {loading ? "Creating..." : "Create Workout"}
       </button>
       {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
     </form>

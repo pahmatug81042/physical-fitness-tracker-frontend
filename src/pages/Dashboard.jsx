@@ -8,6 +8,7 @@ import { getWorkouts } from "../services/workoutService";
 export default function Dashboard() {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [workouts, setWorkouts] = useState([]);
+  const [workoutCreated, setWorkoutCreated] = useState(false);
 
   const handleAddClick = (exercise) => setSelectedExercise(exercise);
   const clearSelectedExercise = () => setSelectedExercise(null);
@@ -27,6 +28,14 @@ export default function Dashboard() {
     loadWorkouts();
   }, [loadWorkouts]);
 
+  // Reload workouts when workoutCreated changes to true
+  useEffect(() => {
+    if (workoutCreated) {
+      loadWorkouts();
+      setWorkoutCreated(false);
+    }
+  }, [workoutCreated, loadWorkouts]);
+
   return (
     <div style={{ padding: 20 }}>
       <h1>Dashboard</h1>
@@ -40,17 +49,16 @@ export default function Dashboard() {
           <h2>Your Workouts</h2>
           <WorkoutList workouts={workouts} />
 
-          {/* Inline workout creation form */}
-          <WorkoutForm onWorkoutCreated={loadWorkouts} />
+          {/* Pass setWorkoutCreated to WorkoutForm */}
+          <WorkoutForm setWorkoutCreated={setWorkoutCreated} />
         </div>
       </div>
 
-      {/* Add Exercise Modal */}
       {selectedExercise && (
         <AddToWorkoutModal
-          exerciseId={selectedExercise.id || selectedExercise._id}
+          exercise={selectedExercise}
           onClose={clearSelectedExercise}
-          onAdded={loadWorkouts} // Reload workouts on add
+          onAdded={loadWorkouts}
         />
       )}
     </div>

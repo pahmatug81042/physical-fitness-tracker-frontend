@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { addExerciseToWorkout, getWorkouts } from "../services/workoutService";
 import ModalPortal from "./ModalPortal";
 
-export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
+export default function AddToWorkoutModal({ exercise, onClose, onAdded }) {
   const [workouts, setWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState("");
   const [sets, setSets] = useState(0);
@@ -25,9 +25,16 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
     e.preventDefault();
     if (!selectedWorkout) return alert("Please select a workout");
 
+    if (!exercise) return alert("Exercise data is missing");
+
     try {
       await addExerciseToWorkout(selectedWorkout, {
-        exerciseId,
+        exerciseId: exercise.id || exercise._id,
+        name: exercise.name,
+        bodyPart: exercise.bodyPart,
+        target: exercise.target,
+        equipment: exercise.equipment,
+        gifUrl: exercise.gifUrl,
         sets,
         reps,
         duration,
@@ -119,7 +126,11 @@ export default function AddToWorkoutModal({ exerciseId, onClose, onAdded }) {
             <button type="submit" style={{ padding: "6px 12px" }}>
               Add
             </button>
-            <button type="button" onClick={onClose} style={{ padding: "6px 12px" }}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{ padding: "6px 12px" }}
+            >
               Cancel
             </button>
           </div>
