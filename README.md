@@ -12,6 +12,12 @@ Here's the deployed frontend on Netlify: https://profound-sunshine-034413.netlif
 
 ---
 
+Here is the deployed backend on Render: https://physical-fitness-tracker-backend.onrender.com/
+
+* Important Note: It will take a few minutes for the server to wake up if it was left idle for sometime to cause it to go to sleep so please beware of that.
+
+---
+
 ## 🚀 Features
 
 - **User Authentication** – Secure signup and login with JWT-based authentication  
