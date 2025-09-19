@@ -32,15 +32,15 @@ export const addExerciseToWorkout = (workoutId, exerciseData) =>
     body: exerciseData,
   });
 
-// Update an exercise in a workout
-export const updateExerciseInWorkout = (workoutId, exerciseIndex, exerciseData) =>
-  apiClient(`/api/workouts/${workoutId}/exercises/${exerciseIndex}`, {
+// Update an exercise in a workout (using exercise ID)
+export const updateExerciseInWorkout = (workoutId, exerciseId, exerciseData) =>
+  apiClient(`/api/workouts/${workoutId}/exercises/${exerciseId}`, {
     method: "PUT",
     body: exerciseData,
   });
 
-// Delete an exercise from a workout
-export const deleteExerciseFromWorkout = (workoutId, exerciseIndex) =>
-  apiClient(`/api/workouts/${workoutId}/exercises/${exerciseIndex}`, {
+// Delete an exercise from a workout (using exercise ID)
+export const deleteExerciseFromWorkout = (workoutId, exerciseId) =>
+  apiClient(`/api/workouts/${workoutId}/exercises/${exerciseId}`, {
     method: "DELETE",
-});
+  });

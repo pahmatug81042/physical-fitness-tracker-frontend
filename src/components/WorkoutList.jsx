@@ -102,7 +102,7 @@ export default function WorkoutList({
             {workout.exercise && workout.exercise.length > 0 ? (
               workout.exercise.map((ex, idx) => (
                 <div
-                  key={idx}
+                  key={ex.exercise._id} // Use the exercise's unique ID
                   style={{
                     padding: 6,
                     borderBottom: "1px solid var(--input-border)",
@@ -116,7 +116,9 @@ export default function WorkoutList({
                   <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
                     <button
                       className="btn"
-                      onClick={() => handleExerciseEdit(workout._id, ex.exercise._id, ex)}
+                      onClick={() =>
+                        handleExerciseEdit(workout._id, ex.exercise._id, ex)
+                      }
                     >
                       ✏️ Edit Exercise
                     </button>
