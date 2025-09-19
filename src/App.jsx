@@ -34,12 +34,6 @@ function App() {
         <Route path="/exercises" element={<ExerciseList />} />
         <Route path="/exercises/:id" element={<ExerciseDetail />} />
 
-        {/* Optional: Redirect /exercise/:id ➜ /exercises/:id */}
-        <Route
-          path="/exercise/:id"
-          element={({ params }) => <Navigate to={`/exercises/${params.id}`} replace />}
-        />
-
         {/* Private routes */}
         <Route
           path="/dashboard"
@@ -65,7 +59,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* NEW: Workout details page */}
         <Route
           path="/workouts/:id"
           element={
