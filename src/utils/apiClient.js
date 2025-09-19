@@ -12,11 +12,17 @@ export const apiClient = async (endpoint, options = {}) => {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const res = await fetch(endpoint.startsWith("http") ? endpoint : `${API_BASE_URL.replace(/\/$/, "")}${endpoint}`, {
-    headers,
-    method: options.method || "GET",
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  });
+  const res = await fetch(
+    endpoint.startsWith("http")
+      ? endpoint
+      : `${API_BASE_URL.replace(/\/$/, "")}${endpoint}`,
+    {
+      headers,
+      method: options.method || "GET",
+      body: options.body ? JSON.stringify(options.body) : undefined,
+      credentials: options.credentials || "same-origin", // Add credentials handling
+    }
+  );
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));
