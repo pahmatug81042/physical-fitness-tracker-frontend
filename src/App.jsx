@@ -31,7 +31,7 @@ function App() {
 
         {/* Exercises */}
         <Route path="/exercises" element={<ExerciseList />} />
-        <Route path="exercises/:id" element={<ExerciseDetail />} />
+        <Route path="/exercises/:id" element={<ExerciseDetail />} />
 
         {/* Private routes */}
         <Route 
