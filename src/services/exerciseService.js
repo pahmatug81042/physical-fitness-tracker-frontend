@@ -1,4 +1,4 @@
-import apiClient from "../utils/apiClient";
+import { apiClient } from "../utils/apiClient";
 
 export const fetchAllExercises = () => apiClient("/api/exercises");
 export const fetchExerciseById = (id) => apiClient(`/api/exercises/${id}`);

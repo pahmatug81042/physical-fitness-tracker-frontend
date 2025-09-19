@@ -1,5 +1,5 @@
 // src/services/workoutService.js
-import apiClient from "../utils/apiClient";
+import { apiClient } from "../utils/apiClient";
 
 export const createWorkout = (payload) =>
   apiClient("/api/workouts", {

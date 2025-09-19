@@ -1,4 +1,4 @@
-import apiClient from "../utils/apiClient";
+import { apiClient } from "../utils/apiClient";
 
 export const register = (payload) => apiClient("/api/auth/register", {
     method: "POST",
